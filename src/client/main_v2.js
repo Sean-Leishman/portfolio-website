@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import * as TWEEN from 'tween';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader';
+import { BufferGeometryUtils } from 'three';'three/examples/jsm/utils/BufferGeometryUtils.js';
 import HDR from './assets/static/sepulchral_chapel_rotunda_2k.hdr';
 import  * as INIT_MODELS from './init_models.js';
 import update_boids from './boids.js';
@@ -19,6 +20,25 @@ import { MeshPhysicalMaterial, Vector3 } from 'three';
 import img from './assets/images/drawing.png';
 //const img = require('./assets/images/drawing.png');
 
+import fullpage from 'fullpage.js';
+
+const fp = new fullpage('#fullpage', {
+	//options here
+	//anchors:['about','project-1','project-2','project-3','project-4','project-5'],
+    fixedElements: '.webgl',
+    scrollOverflow: true,
+    licenseKey:'30AKK-H9O08-A2J18-L0PHH-RQRPO',
+    onLeave: function(origin, destination, direction, trigger){
+        onLeave(origin,destination,direction,trigger);
+    },
+    afterRender: function(){
+        //renderModels();
+    },
+    scrollingSpeed: 2000
+});
+
+const cursor = {x:0,y:0}
+
 let camera, scene, renderer, raycaster, frustum,loader,clock;
 let pawnModel,pawnMixer,pawnAction,pawnAnimations;
 let horseModel,horseMixer,horseAction, horseAnimations;
@@ -32,6 +52,7 @@ let central_balls;
 let stats;
 
 let current_model,current_mixer,current_animations,current_action;
+let previous_model,previous_mixer,previous_animations,previous_action;
 let animated_model;
 
 let previous_scroll_percent = 0;
@@ -45,8 +66,8 @@ let timer = null;
 
 let isScrollEnabled = true;
 
-let animation_state;
-const ANIMATION_STATE = {
+let animation_main_state;
+const ANIMATION_MAIN_STATE = {
     NORMAL: 0,
     UNSNAPPED: 1,
     SNAPPED: 2,
@@ -54,14 +75,14 @@ const ANIMATION_STATE = {
     CONTINUE_SNAPPED: 5,
     CONTINUE_UNSNAPPED:6
 }
-let logo_state;
-const LOGO_STATE = {
+let logo_main_state;
+const LOGO_MAIN_STATE = {
     MIDDLE: 0,
     CORNER: 1
 }
 
-let state;
-const STATE = {
+let main_state;
+const MAIN_STATE = {
     BALL_MODE: 0,
     MODEL_MODE: 1,
     BALL_TO_MODEL: 2,
@@ -69,8 +90,8 @@ const STATE = {
     MODEL_TO_MODEL: 4
 }
 
-let ball_merge_state;
-const BALL_MERGE_STATE = {
+let ball_merge_main_state;
+const BALL_MERGE_MAIN_STATE = {
     MERGE_IN_PROCESS: 0,
     MERGE_STAGE_DONE: 2,
     MERGE_FINISHED: 4,
@@ -79,8 +100,8 @@ const BALL_MERGE_STATE = {
     INTERUPT_ANIMATION: 7
 }
 
-let model_break_state;
-const MODEL_BREAK_STATE = {
+let model_break_main_state;
+const MODEL_BREAK_MAIN_STATE = {
     BREAK_START: 0,
     BREAK_IN_PROCESS: 1,
     BREAK_STAGE_DONE: 2,
@@ -89,21 +110,21 @@ const MODEL_BREAK_STATE = {
     INTERUPT_ANIMATION: 5
 }
 
-let model_to_model_state;
-const MODEL_TO_MODEL_STATE = {
+let model_to_model_main_state;
+const MODEL_TO_MODEL_MAIN_STATE = {
     BREAK: 0,
     MERGE: 1,
     FINISH: 2
 }
 
-let scroll_state;
-const SCROLL_STATE = {
+let scroll_main_state;
+const SCROLL_MAIN_STATE = {
     UNSCROLLED: 0,
     SCROLLED: 1
 }
 
-let model_state;
-const MODEL_STATE = {
+let model_main_state;
+const MODEL_MAIN_STATE = {
     PAWN: 0,
     HORSE: 1,
     MAZE:2,
@@ -113,26 +134,30 @@ const MODEL_STATE = {
 let previous_page;
 let current_page = 0;
 let total_pages = 6;
-let page_transitions = {0: {1:[STATE.BALL_TO_MODEL]}, 
-                        1: {0:[STATE.MODEL_TO_BALL],2:[STATE.MODEL_TO_MODEL]}, 
-                        2: {1: [STATE.MODEL_TO_MODEL], 3:[STATE.MODEL_TO_MODEL]},
-                        3: {2: [STATE.MODEL_TO_MODEL], 4: [STATE.MODEL_TO_MODEL]},
-                        4: {3: [STATE.MODEL_TO_MODEL], 5: [STATE.MODEL_TO_MODEL]},
-                        5: {4: [STATE.MODEL_TO_MODEL], 6: [STATE.MODEL_TO_BALL]},
-                        6: {5: [STATE.BALL_TO_MODEL]},
+let page_transitions = {0: {1:[MAIN_STATE.BALL_TO_MODEL]}, 
+                        1: {0:[MAIN_STATE.MODEL_TO_BALL],2:[MAIN_STATE.MODEL_TO_MODEL]}, 
+                        2: {1: [MAIN_STATE.MODEL_TO_MODEL], 3:[MAIN_STATE.MODEL_TO_MODEL]},
+                        3: {2: [MAIN_STATE.MODEL_TO_MODEL], 4: [MAIN_STATE.MODEL_TO_MODEL]},
+                        4: {3: [MAIN_STATE.MODEL_TO_MODEL], 5: [MAIN_STATE.MODEL_TO_MODEL]},
+                        5: {4: [MAIN_STATE.MODEL_TO_MODEL], 6: [MAIN_STATE.MODEL_TO_BALL]},
+                        6: {5: [MAIN_STATE.BALL_TO_MODEL]},
                     }
 let models;
-let model_page = {1: MODEL_STATE.PAWN, 2:MODEL_STATE.HORSE, 3:MODEL_STATE.MAZE, 5: MODEL_STATE.HEAD,
-                    4: MODEL_STATE.GRAPH};
+let model_page = {1: MODEL_MAIN_STATE.PAWN, 2:MODEL_MAIN_STATE.HORSE, 3:MODEL_MAIN_STATE.MAZE, 5: MODEL_MAIN_STATE.HEAD,
+                    4: MODEL_MAIN_STATE.GRAPH};
 let scroll_page_levels = {}
 for (let i = 0; i < total_pages; i++){
     scroll_page_levels[i] = ((i + 1)/total_pages).toFixed(2);
 }
 
+let delta = 0;
+
 let imgLogo;
 
 let envmap;
 let envmaploader;
+
+let base_material;
 
 const hdrEquirect = new RGBELoader()
   .load( HDR, function (hdrmap) {
@@ -160,7 +185,7 @@ function init(hdrmap){
     frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));  
     
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x000000);
+    scene.background = new THREE.Color(0x212121);
 
     clock = new THREE.Clock();
     raycaster = new THREE.Raycaster();
@@ -210,9 +235,19 @@ function init(hdrmap){
     scene.add(avoid_object); 
 
     const geometry = new THREE.SphereGeometry( 1, 32, 16 );
+    //const geometry = THREE.BufferGeometryUtils.fromGeometry(sphere);
     for ( let i = 0; i < scene.number_of_spheres; i ++ ) {
         generateBall(geometry)
     }
+
+    base_material = new THREE.MeshPhysicalMaterial( {
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.1,
+        metalness: 0.9,
+        roughness: 0.1,
+        color: 0x8418ca,
+        envMap: envmap.texture,
+      } );
     loader = new GLTFLoader();
     // Load Model of Logo 
     //[ pawnModel, pawnMixer, pawnAnimations, pawnAction ] = INIT_MODELS.init_pawnModel();
@@ -241,7 +276,7 @@ function init(hdrmap){
         logoModel.scale.set(20,20,20);
         //logoModel.rotation.set(1.5708,0,0);
         logoModel.position.set(-50,-30,0)
-        logoModel.visible = true;
+        logoModel.visible = false;
         logoModel.isModel = false;
         scene.add(logoModel);
         render()
@@ -258,7 +293,7 @@ function init(hdrmap){
         pawnAnimations = gltf.animations;
         pawnMixer = new THREE.AnimationMixer(pawnModel);
 
-        const material = new THREE.MeshPhysicalMaterial( {
+        /* const material = new THREE.MeshPhysicalMaterial( {
             color: 0xefd383,
             metalness: 0,
             roughness: 0,
@@ -268,7 +303,8 @@ function init(hdrmap){
             specularColor: 0xffffff,
             opacity: 1,
             side: THREE.DoubleSide,
-            } );
+            } ); */
+        const material = base_material; 
 
         let p = pawnModel.getObjectByName('Cylinder001');
         p.material = material;
@@ -279,10 +315,14 @@ function init(hdrmap){
         p.geometry.computeVertexNormals();
         //pawnModel.children[0].material.emissive = new THREE.Color(0x00ffff);
         pawnModel.name = "Pawn";
-        pawnModel.visible = false;
+        pawnModel.visible = true;
         pawnModel.correct_scale = {x:50, y:50, z:50}
         pawnModel.scale_ratio = {x:1, y:1, z:1}
+        pawnModel.start_position = {x:0,y:-1000,z:0};
         pawnModel.correct_position = {x: 140,y:-80};
+        pawnModel.loaded = true;
+        pawnModel.scale.set(0,0,0);
+        //pawnModel.position.set(0,-1000,0);
         pawnModel.isModel = true;
         scene.add(pawnModel);
         render()
@@ -305,10 +345,11 @@ function init(hdrmap){
         horseModel.correct_scale = {x:200, y:200, z:200}
         horseModel.scale_ratio = {x: 200, y: 200, z: 200}
         horseModel.correct_position = {x: 140,y:-80};
-
+        //horseModel.position.set(0,-1000,0);
+        horseModel.scale.set(0,0,0);
         let horseMesh = horseModel.getObjectByName('Mesh_0002');
         horseModel.originalMaterial = horseMesh.material;
-
+        horseModel.loaded = false;
         //const colorKF = new THREE.ColorKeyframeTrack( '.material.color', [ 0, 1, 2 ], [ 1, 0, 0, 0, 1, 0, 0, 0, 1 ], THREE.InterpolateDiscrete );
 
 
@@ -327,14 +368,7 @@ function init(hdrmap){
         mazeAnimations = gltf.animations;
         mazeMixer = new THREE.AnimationMixer(mazeModel);
 
-        const material = new THREE.MeshPhysicalMaterial( {
-            clearcoat: 1.0,
-            clearcoatRoughness: 0.1,
-            metalness: 0.9,
-            roughness: 0.1,
-            color: 0x8418ca,
-            envMap: envmap.texture,
-          } );
+        const material = base_material;
 
         let p = mazeModel.getObjectByName('Cube');
         p.material = material;
@@ -349,6 +383,9 @@ function init(hdrmap){
         mazeModel.correct_scale = {x:100, y:100, z:100}
         mazeModel.scale_ratio = {x:60, y:60, z:60}
         mazeModel.correct_position = {x: 100,y:-50};
+        mazeModel.loaded = false;
+        //mazeModel.position.set(0,-1000,0);
+        mazeModel.scale.set(0,0,0);
         mazeModel.isModel = true;
         scene.add(mazeModel);
         render()
@@ -382,6 +419,9 @@ function init(hdrmap){
         headModel.scale_ratio = {x:1, y:1, z:1}
         headModel.correct_position = {x: 100,y:-50};
         headModel.isModel = true;
+        headModel.loaded = false;
+        //headModel.position.set(0,-1000,0);
+        headModel.scale.set(0,0,0);
         scene.add(headModel);
         render()
         //pawnMixer.addEventListener('finished', setNoScroll)
@@ -394,14 +434,7 @@ function init(hdrmap){
         graphAnimations = gltf.animations;
         graphMixer = new THREE.AnimationMixer(graphModel);
 
-        const material = new THREE.MeshPhysicalMaterial( {
-            clearcoat: 1.0,
-            clearcoatRoughness: 0.1,
-            metalness: 0.9,
-            roughness: 0.1,
-            color: 0x8418ca,
-            envMap: envmap.texture,
-          } );
+        const material = base_material;
 
         let p = graphModel.getObjectByName('Cube');
         p.material = material;
@@ -417,6 +450,9 @@ function init(hdrmap){
         graphModel.scale_ratio = {x:10, y:10, z:10}
         graphModel.correct_position = {x: 100,y:-50};
         graphModel.rotation.set(0,-0.2,0)
+        graphModel.loaded = false;
+        //graphModel.position.set(0,-1000,0)
+        graphModel.scale.set(0,0,0);
         graphModel.isModel = true;
         scene.add(graphModel);
         render()
@@ -425,8 +461,8 @@ function init(hdrmap){
         console.error(error);
     });
 
-    state = STATE.BALL_MODE;
-    logo_state = LOGO_STATE.MIDDLE;
+    main_state = MAIN_STATE.BALL_MODE;
+    logo_main_state = LOGO_MAIN_STATE.MIDDLE;
     imgLogo = document.querySelector('.logo');
     imgLogo.src = img;
 
@@ -434,38 +470,40 @@ function init(hdrmap){
     document.body.appendChild(stats.dom);
 
     window.addEventListener('resize', onResize);
+    window.addEventListener('mousemove', onMouseMove);
     document.addEventListener('scroll', onScroll);
 }
 
 function animate(){
     requestAnimationFrame( animate );
-    frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));  
+    
     models = {0: pawnModel, 1: horseModel, 2: mazeModel, 3: graphModel, 4:headModel}
     update_current_model();
-    
-    if (current_page == 0){
-        //console.log(current_model,current_model.name,current_page)
-    }
+    update_previous_model();
 
+    animate_camera_movement();
     //update_pages();
-    switch (state){
-        case STATE.BALL_MODE:
+    switch (main_state){
+        case MAIN_STATE.BALL_MODE:
             enable_scroll();
             animate_ball_motion(true);
             break;
-        case STATE.BALL_TO_MODEL:
+        case MAIN_STATE.BALL_TO_MODEL:
             animate_ball_motion(false);
-            switch (ball_merge_state){
-                case BALL_MERGE_STATE.MERGE_FINISHED:
+            switch (ball_merge_main_state){
+                case BALL_MERGE_MAIN_STATE.MERGE_FINISHED:
                     if (has_snapped){
                         displayModel();
                         has_snapped = false;
                         //isScrollEnabled = true;
                     }
+                    else{
+                        displayModel();
+                    }
                     break;
-                case BALL_MERGE_STATE.MERGE_IN_PROCESS:
+                case BALL_MERGE_MAIN_STATE.MERGE_IN_PROCESS:
                     if (scene.children.filter(val => {return val.visible && val.name == "Sphere"}).every(val => !val.closest_ball)){
-                        ball_merge_state = BALL_MERGE_STATE.MERGE_STAGE_DONE;
+                        ball_merge_main_state = BALL_MERGE_MAIN_STATE.MERGE_STAGE_DONE;
                     }
                     else{
                         merge();
@@ -473,79 +511,88 @@ function animate(){
                     }
                     
                     break;
-                case BALL_MERGE_STATE.MERGE_STAGE_DONE:
+                case BALL_MERGE_MAIN_STATE.MERGE_STAGE_DONE:
                     if (scene.children.filter((val,idx,arr) => 
                         {return (val.name=="Sphere" && val.visible)}).length == 1){
-                            ball_merge_state = BALL_MERGE_STATE.MERGE_FINISHED;
+                            ball_merge_main_state = BALL_MERGE_MAIN_STATE.MERGE_FINISHED;
                         }
                     else{
                         initMerge();
                         animate_ball_motion(false);
                     }
                     break;
-                case BALL_MERGE_STATE.MERGE_START:
+                case BALL_MERGE_MAIN_STATE.MERGE_START:
                     initMerge();
                     break;
-                case BALL_MERGE_STATE.INTERUPT_ANIMATION:
+                case BALL_MERGE_MAIN_STATE.INTERUPT_ANIMATION:
                     interupt_animation_for_merge();
                     break;
             }
             break;
-        case STATE.MODEL_TO_BALL:
-            switch (model_break_state){
-                case MODEL_BREAK_STATE.BREAK_START:
+        case MAIN_STATE.MODEL_TO_BALL:
+            switch (model_break_main_state){
+                case MODEL_BREAK_MAIN_STATE.BREAK_START:
                     break_model();
                     break;
-                case MODEL_BREAK_STATE.BREAK_IN_PROCESS:
+                case MODEL_BREAK_MAIN_STATE.BREAK_IN_PROCESS:
                     animate_ball_motion(false);
                     if (has_snapped){
                         break_process();
                     }
+                    else{
+                        break_process();
+                    }
                     break;
-                case MODEL_BREAK_STATE.BREAK_FINISHED:
-                    state = STATE.BALL_MODE;
+                case MODEL_BREAK_MAIN_STATE.BREAK_FINISHED:
+                    main_state = MAIN_STATE.BALL_MODE;
                     has_snapped = false;
                     break;
-                case MODEL_BREAK_STATE.INTERUPT_ANIMATION:
+                case MODEL_BREAK_MAIN_STATE.INTERUPT_ANIMATION:
                     interupt_animation_for_break();
             }   
             break;
-        case STATE.MODEL_TO_MODEL:
+        case MAIN_STATE.MODEL_TO_MODEL:
             animate_ball_motion(false);
-            switch (model_to_model_state){
-                case MODEL_TO_MODEL_STATE.BREAK:
-                    // MODEL_TO_BALL state 
-                    switch (model_break_state){
-                        case MODEL_BREAK_STATE.BREAK_START:
+            switch (model_to_model_main_state){
+                case MODEL_TO_MODEL_MAIN_STATE.BREAK:
+                    // MODEL_TO_BALL main_state 
+                    switch (model_break_main_state){
+                        case MODEL_BREAK_MAIN_STATE.BREAK_START:
                             break_model();
                             
                             break;
-                        case MODEL_BREAK_STATE.BREAK_IN_PROCESS:
+                        case MODEL_BREAK_MAIN_STATE.BREAK_IN_PROCESS:
                             animate_ball_motion(false);
                             if (has_snapped){
                                 break_process();
                             }
+                            else{
+                                break_process();
+                            }
                             break;
-                        case MODEL_BREAK_STATE.BREAK_FINISHED:
-                            model_to_model_state = MODEL_TO_MODEL_STATE.MERGE;
-                            ball_merge_state = BALL_MERGE_STATE.MERGE_START;
+                        case MODEL_BREAK_MAIN_STATE.BREAK_FINISHED:
+                            model_to_model_main_state = MODEL_TO_MODEL_MAIN_STATE.MERGE;
+                            ball_merge_main_state = BALL_MERGE_MAIN_STATE.MERGE_START;
                             break;
-                        case MODEL_BREAK_STATE.INTERUPT_ANIMATION:
+                        case MODEL_BREAK_MAIN_STATE.INTERUPT_ANIMATION:
                             interupt_animation_for_break();
                     }   
                     break;
-                case MODEL_TO_MODEL_STATE.MERGE:
-                    // BALL_TO_MODEL state
-                    switch (ball_merge_state){
-                        case BALL_MERGE_STATE.MERGE_FINISHED:
+                case MODEL_TO_MODEL_MAIN_STATE.MERGE:
+                    // BALL_TO_MODEL main_state
+                    switch (ball_merge_main_state){
+                        case BALL_MERGE_MAIN_STATE.MERGE_FINISHED:
                             if (has_snapped){
                                 displayModel();
                                 has_snapped = false;
                             }
+                            else{
+                                displayModel();
+                            }
                             break;
-                        case BALL_MERGE_STATE.MERGE_IN_PROCESS:
+                        case BALL_MERGE_MAIN_STATE.MERGE_IN_PROCESS:
                             if (scene.children.filter(val => {return val.visible && val.name == "Sphere"}).every(val => !val.closest_ball)){
-                                ball_merge_state = BALL_MERGE_STATE.MERGE_STAGE_DONE;
+                                ball_merge_main_state = BALL_MERGE_MAIN_STATE.MERGE_STAGE_DONE;
                             }
                             else{
                                 merge();
@@ -553,20 +600,20 @@ function animate(){
                             }
                             
                             break;
-                        case BALL_MERGE_STATE.MERGE_STAGE_DONE:
+                        case BALL_MERGE_MAIN_STATE.MERGE_STAGE_DONE:
                             if (scene.children.filter((val,idx,arr) => 
                                 {return (val.name=="Sphere" && val.visible)}).length == 1){
-                                    ball_merge_state = BALL_MERGE_STATE.MERGE_FINISHED;
+                                    ball_merge_main_state = BALL_MERGE_MAIN_STATE.MERGE_FINISHED;
                                 }
                             else{
                                 initMerge();
                                 animate_ball_motion(false);
                             }
                             break;
-                        case BALL_MERGE_STATE.MERGE_START:
+                        case BALL_MERGE_MAIN_STATE.MERGE_START:
                             initMerge();
                             break;
-                        case BALL_MERGE_STATE.INTERUPT_ANIMATION:
+                        case BALL_MERGE_MAIN_STATE.INTERUPT_ANIMATION:
                             interupt_animation_for_merge();
                             break;
                     }
@@ -574,19 +621,13 @@ function animate(){
 
                  
             }
-        case STATE.MODEL_MODE:
+        case MAIN_STATE.MODEL_MODE:
             animate_ball_motion(false);        
     }
 
     TWEEN.update();
-    let delta = clock.getDelta();
+    delta = clock.getDelta();
     if (current_mixer){
-        if (current_mixer == pawnMixer){
-            //console.log('pawn mixing')
-        }
-        if (current_mixer == horseMixer){
-            //console.log('horse mixing')
-        }
         current_mixer.update(delta)
     }
     stats.update()
@@ -597,6 +638,7 @@ function render(){
 }
 
 function animate_ball_motion(is_boid_mode){
+    frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));  
     if (is_boid_mode) update_boids(
         scene,
         scene.children.filter(child => {return child.name=='Sphere' && child.visible}))
@@ -620,31 +662,31 @@ function animate_ball_motion(is_boid_mode){
 
 
 function break_model(){
-    [ current_model, current_mixer, current_animations, current_action ] = get_model_details(current_model); // Get model corresponding to page
+    [ previous_model, previous_mixer, previous_animations, previous_action ] = get_previous_model_details(previous_model); // Get model corresponding to page
 
-    current_mixer.removeEventListener('finished', animation_finished);
+    previous_mixer.removeEventListener('finished', animation_finished);
 
-    current_action = current_mixer.clipAction( current_animations[1] );
-    current_action.setLoop(THREE.LoopOnce);
-    current_action.paused = false;
-    current_action.timeScale = -3;
-    current_action.play();
+    previous_action = current_mixer.clipAction( previous_animations[1] );
+    previous_action.setLoop(THREE.LoopOnce);
+    previous_action.paused = false;
+    previous_action.timeScale = -3;
+    previous_action.play();
 
-    model_break_state = MODEL_BREAK_STATE.ANIMATION_WAIT;
-    animated_model = {model: current_model, mixer: current_mixer, action: current_action}
-    current_mixer.addEventListener('finished', reverse_animation_finished);
+    model_break_main_state = MODEL_BREAK_MAIN_STATE.ANIMATION_WAIT;
+    animated_model = {model: previous_model, mixer: previous_mixer, action: previous_action}
+    previous_mixer.addEventListener('finished', reverse_animation_finished);
 
     if (scroll_direction == -1){
-        new TWEEN.Tween(current_model.position).to({y:-1000}).start();
+        new TWEEN.Tween(previous_model.position).to({y:-1000},1000).start();
     }
     if (scroll_direction == 1){
-        new TWEEN.Tween(current_model.position).to({y:1000}).start();
+        new TWEEN.Tween(previous_model.position).to({y:1000},1000).start();
     }
-    model_break_state = MODEL_BREAK_STATE.BREAK_IN_PROCESS;
+    model_break_main_state = MODEL_BREAK_MAIN_STATE.BREAK_IN_PROCESS;
 }
 
 function break_process(){
-    model_break_state = MODEL_BREAK_STATE.BREAK_FINISHED;
+    model_break_main_state = MODEL_BREAK_MAIN_STATE.BREAK_FINISHED;
 }
 
 function reverse_animation_finished(){
@@ -656,7 +698,8 @@ function reverse_animation_finished(){
     animated_model.model.ball.scale.z = animated_model.model.scale.x;
     animated_model.model.ball.visible = false;
     animated_model.mixer.stopAllAction();*/
-    //model_break_state = MODEL_BREAK_STATE.BREAK_IN_PROCESS;
+    //model_break_main_state = MODEL_BREAK_MAIN_STATE.BREAK_IN_PROCESS;
+    animated_model.model.visible = false;
 }
 function initMerge(){
     let balls = scene.children.filter((val,idx,arr) => 
@@ -664,10 +707,10 @@ function initMerge(){
     balls.forEach(ball => {
         ball.velocity.set(Math.random()-0.5,Math.random()-0.5,Math.random()-1)
     })
-    ball_merge_state = BALL_MERGE_STATE.MERGE_FINISHED;
+    ball_merge_main_state = BALL_MERGE_MAIN_STATE.MERGE_FINISHED;
 }
 function displayModel(){
-    [ current_model, current_mixer, current_animations, current_action ]= get_model_details(current_model);
+    [ current_model, current_mixer, current_animations, current_action ]= get_current_model_details(current_model);
     current_mixer.removeEventListener('finished', reverse_animation_finished);
     let center_ball = scene.children.filter(val => {
         return val.visible && val.isModel;
@@ -718,21 +761,22 @@ function displayModel(){
 
     // TODO
     // Change for when have to be able to reverse midanimation
-    ball_merge_state = BALL_MERGE_STATE.ANIMATION_WAIT;
+    ball_merge_main_state = BALL_MERGE_MAIN_STATE.ANIMATION_WAIT;
     animated_model = {model:current_model,mixer:current_mixer,action:current_action};
     current_mixer.addEventListener('finished', animation_finished);
+    ball_merge_main_state = BALL_MERGE_MAIN_STATE.MERGE_START;
+    main_state = MAIN_STATE.MODEL_MODE;
 }
 
 function animation_finished(){
-    ball_merge_state = BALL_MERGE_STATE.MERGE_START;
-    state = STATE.MODEL_MODE;
+    //ball_merge_main_state = BALL_MERGE_MAIN_STATE.MERGE_START;
+    //main_state = MAIN_STATE.MODEL_MODE;
     enable_scroll();
-    console.log('scroll-enabled')
 }
 
 
 let fixing = false;
-scroll_state = SCROLL_STATE.UNSCROLLED;
+scroll_main_state = SCROLL_MAIN_STATE.UNSCROLLED;
 function onScroll(){
     previous_scroll_percent = current_scroll_percent;
     current_scroll_percent = _get_scroll_percentage();
@@ -743,89 +787,151 @@ function onScroll(){
     }
     console.log('scrolling',current_scroll_percent);
     (document.getElementById('scrollProgress')).innerText ='Scroll Progress : ' + current_scroll_percent.toFixed(2)
-    //scroll_state = SCROLL_STATE.HALF_SCROLLED;
+    //scroll_main_state = SCROLL_MAIN_STATE.HALF_SCROLLED;
     determine_scroll_direction();
-    //console.log(scroll_state,animation_state,state,scroll_direction,previous_scroll_percent,current_scroll_percent)
-    if (animation_state == ANIMATION_STATE.NORMAL){
+    //console.log(scroll_main_state,animation_main_state,main_state,scroll_direction,previous_scroll_percent,current_scroll_percent)
+    if (animation_main_state == ANIMATION_MAIN_STATE.NORMAL){
         fixing = false;
-        switch (state){
+        switch (main_state){
             // Start of Scroll 
-            case STATE.BALL_MODE:
-                state = page_transitions[current_page][current_page+scroll_direction][0];
-                if (state == STATE.BALL_TO_MODEL){
-                    ball_merge_state = BALL_MERGE_STATE.MERGE_START;
+            case MAIN_STATE.BALL_MODE:
+                main_state = page_transitions[current_page][current_page+scroll_direction][0];
+                if (main_state == MAIN_STATE.BALL_TO_MODEL){
+                    ball_merge_main_state = BALL_MERGE_MAIN_STATE.MERGE_START;
                 }
-                if (current_page == 0 && logo_state == LOGO_STATE.MIDDLE){
-                    logo_state = LOGO_STATE.CORNER;
+                if (current_page == 0 && logo_main_state == LOGO_MAIN_STATE.MIDDLE){
+                    logo_main_state = LOGO_MAIN_STATE.CORNER;
                     animate_logo(true);
                 }
                 break;
-            case STATE.MODEL_MODE:
-                state = page_transitions[current_page][current_page+scroll_direction][0];
-                if (state == STATE.MODEL_TO_MODEL){
-                    model_to_model_state = MODEL_TO_MODEL_STATE.BREAK;
-                    model_break_state = MODEL_BREAK_STATE.BREAK_START;
+            case MAIN_STATE.MODEL_MODE:
+                main_state = page_transitions[current_page][current_page+scroll_direction][0];
+                if (main_state == MAIN_STATE.MODEL_TO_MODEL){
+                    model_to_model_main_state = MODEL_TO_MODEL_MAIN_STATE.BREAK;
+                    model_break_main_state = MODEL_BREAK_MAIN_STATE.BREAK_START;
                 }
-                if (state == STATE.MODEL_TO_BALL){
-                    model_break_state = MODEL_BREAK_STATE.BREAK_START;
-                    if (current_page == 1 && logo_state == LOGO_STATE.CORNER){
-                        logo_state = LOGO_STATE.MIDDLE;
+                if (main_state == MAIN_STATE.MODEL_TO_BALL){
+                    model_break_main_state = MODEL_BREAK_MAIN_STATE.BREAK_START;
+                    if (current_page == 1 && logo_main_state == LOGO_MAIN_STATE.CORNER){
+                        logo_main_state = LOGO_MAIN_STATE.MIDDLE;
                         animate_logo(false);
                     }
                 }
                 break;
         }
-        console.log("Normal State")
+        console.log("Normal Main_state")
     }
     previous_scroll_direction = scroll_direction;
 }
 
+function onLeave(origin, destination, direction, trigger){
+    normal_scroll_direction = direction == 'up' ? 1 : -1;
+    scroll_direction = direction == 'up' ? 1 : -1;
+    current_page = destination.index;
+    previous_page = origin.index;
+
+    update_current_model();
+    update_previous_model();
+
+    switch (main_state){
+        // Start of Scroll 
+        case MAIN_STATE.BALL_MODE:
+            main_state = page_transitions[previous_page][current_page][0];
+            if (main_state == MAIN_STATE.BALL_TO_MODEL){
+                ball_merge_main_state = BALL_MERGE_MAIN_STATE.MERGE_START;
+            }
+            if (previous_page == 0 && current_page == 1 && logo_main_state == LOGO_MAIN_STATE.MIDDLE){
+                logo_main_state = LOGO_MAIN_STATE.CORNER;
+                animate_logo(true);
+            }
+            break;
+        case MAIN_STATE.MODEL_MODE:
+            main_state = page_transitions[previous_page][current_page][0];
+            if (main_state == MAIN_STATE.MODEL_TO_MODEL){
+                model_to_model_main_state = MODEL_TO_MODEL_MAIN_STATE.BREAK;
+                model_break_main_state = MODEL_BREAK_MAIN_STATE.BREAK_START;
+            }
+            if (main_state == MAIN_STATE.MODEL_TO_BALL){
+                model_break_main_state = MODEL_BREAK_MAIN_STATE.BREAK_START;
+                if (previous_page == 1 && current_page == 0 && logo_main_state == LOGO_MAIN_STATE.CORNER){
+                    logo_main_state = LOGO_MAIN_STATE.MIDDLE;
+                    animate_logo(false);
+                }
+            }
+            break;
+    }
+    disable_scroll();
+    let next_models = get_next_models();
+    next_models.forEach(model => {
+        if (model){
+            if (!model.loaded){
+                model.visible = true;
+                model.scale.set(0,0,0);
+                model.loaded=true;
+            }
+        }
+    })
+}
+
+function onMouseMove(event){
+    cursor.x = event.clientX / window.innerWidth - 0.5
+    cursor.y = event.clientY / window.innerHeight - 0.5
+}
+
+function animate_camera_movement(){
+    //camera.position.y = - scrollY / window.innerHeight * objectsDistance
+
+    const parallaxX = - cursor.x * 10
+    const parallaxY = - cursor.y * 10
+    camera.position.x += (parallaxX - camera.position.x) * 5 * delta
+    camera.position.y += (parallaxY - camera.position.y) * 5 * delta
+}
 function determine_scroll_direction(){
     // Scolling Down
     if (current_scroll_percent > previous_scroll_percent){
-        if (state == STATE.MODEL_MODE || state == STATE.BALL_MODE){
-            animation_state = ANIMATION_STATE.NORMAL;
+        if (main_state == MAIN_STATE.MODEL_MODE || main_state == MAIN_STATE.BALL_MODE){
+            animation_main_state = ANIMATION_MAIN_STATE.NORMAL;
             has_snapped = false;
             normal_scroll_direction = -1;
         }
         // Opposite scroll while page not snapped
         else if (normal_scroll_direction == 1 && !has_snapped){
-            animation_state = ANIMATION_STATE.UNSNAPPED;
+            animation_main_state = ANIMATION_MAIN_STATE.UNSNAPPED;
             normal_scroll_direction = -1;
             fixing = true;
         }
         // Opposite Scroll but the page has snapped but animation is not finished (not in ball/model mode)
         else if (normal_scroll_direction == 1 && has_snapped){
-            animation_state = ANIMATION_STATE.SNAPPED;
+            animation_main_state = ANIMATION_MAIN_STATE.SNAPPED;
             normal_scroll_direction = -1;
             has_snapped = false;
             fixing = true;
         }
         else{
-            animation_state = ANIMATION_STATE.STOPPED;
+            animation_main_state = ANIMATION_MAIN_STATE.STOPPED;
         }
         scroll_direction = 1;
     }
     // Scroll Up
     if (previous_scroll_percent > current_scroll_percent){
         // Page Snapped and Animations finished
-        if (state == STATE.MODEL_MODE || state == STATE.BALL_MODE){
-            animation_state = ANIMATION_STATE.NORMAL;
+        if (main_state == MAIN_STATE.MODEL_MODE || main_state == MAIN_STATE.BALL_MODE){
+            animation_main_state = ANIMATION_MAIN_STATE.NORMAL;
             has_snapped = false;
             normal_scroll_direction = 1;
         }
         // Opposite scroll while page not snapped
         else if (normal_scroll_direction == -1 && !has_snapped){
-            animation_state = ANIMATION_STATE.UNSNAPPED;
+            animation_main_state = ANIMATION_MAIN_STATE.UNSNAPPED;
             normal_scroll_direction = 1;
         }
         // Opposite Scroll but the page has snapped but animation is not finished (not in ball/model mode)
         else if (normal_scroll_direction == -1 && has_snapped){
-            animation_state = ANIMATION_STATE.SNAPPED;
+            animation_main_state = ANIMATION_MAIN_STATE.SNAPPED;
             normal_scroll_direction = 1;
         }
         else{
-            animation_state = ANIMATION_STATE.STOPPED;
+            animation_main_state = ANIMATION_MAIN_STATE.STOPPED;
         }
 
         scroll_direction = -1;
@@ -877,14 +983,9 @@ function onResize(){
 
 function generateBall(geometry){
     const material = {
-        clearcoat: 1,
-        clearcoatRoughness: 0.1,
-        metalness: 0.9,
-        roughness: 0.5,
         color: 0x8418ca,
-        envMap: envmap.texture,
     }
-    const object = new THREE.Mesh( geometry, new THREE.MeshPhysicalMaterial( 
+    const object = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( 
         //{ color: Math.random() * 0xffffff } 
         material
         ) );
@@ -925,6 +1026,14 @@ function animate_logo(minimize){
 }
 function update_current_model(){
     current_model = models[model_page[current_page]];
+    //current_model = models[model_page[previous_page]];
+}
+function update_previous_model(){
+    previous_model = models[model_page[previous_page]];
+}
+
+function get_next_models(){
+    return [models[model_page[current_page+1]],models[model_page[current_page-1]]]
 }
 
 function convert_position_to_coord(vector){
@@ -956,7 +1065,7 @@ function convert_coord_to_position(vector){
 function get_corners_x_y(z){
     //for 
 }
-function get_model_details(){
+function get_current_model_details(){
     if (current_model == pawnModel){
         return [ pawnModel, pawnMixer, pawnAnimations, pawnAction ];
     }
@@ -970,6 +1079,24 @@ function get_model_details(){
         return [ headModel, headMixer, headAnimations, headAction ];
     }
     else if (current_model == graphModel){
+        return [ graphModel, graphMixer, graphAnimations, graphAction ]
+    }
+}
+
+function get_previous_model_details(){
+    if (previous_model == pawnModel){
+        return [ pawnModel, pawnMixer, pawnAnimations, pawnAction ];
+    }
+    else if (previous_model == horseModel){
+        return [ horseModel, horseMixer, horseAnimations, horseAction ];
+    }
+    else if (previous_model == mazeModel){
+        return [ mazeModel, mazeMixer, mazeAnimations, mazeAction ]
+    }
+    else if (previous_model == headModel){
+        return [ headModel, headMixer, headAnimations, headAction ];
+    }
+    else if (previous_model == graphModel){
         return [ graphModel, graphMixer, graphAnimations, graphAction ]
     }
 }
@@ -1038,11 +1165,13 @@ function disable_scroll(){
     let scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
     parent.classList.add('disable-scroll');
     parent.scrollTo(scrollLeft, scrollTop);
+    console.log("Disbale scroll");
 }
 
 function enable_scroll(){
     parent.classList.remove('disable-scroll');
     isScrollEnabled = true;
+    console.log("Enable Scroll")
 }
 
-export default scene;
+export default onLeave;
