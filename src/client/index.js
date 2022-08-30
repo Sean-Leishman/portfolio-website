@@ -1,5 +1,5 @@
+import 'fullpage.js/dist/fullpage.css';
 import './index.css';
-//import 'fullpage.css';
 import './animator.js';
 import './main_v2.js';
 //import './floating_shapes.js

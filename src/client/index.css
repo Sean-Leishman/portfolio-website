@@ -122,6 +122,71 @@ h2 {
     border: none;
     cursor: pointer;
 }
+.nav {
+
+}
+.nav-left{
+    left:40px;
+    transform: rotateZ(-90deg) translateX(-50%);
+    transform-origin: 0 50%;
+}
+.nav-right{
+    right:40px;
+    transform: rotateZ(90deg) translateX(-50%);
+    transform-origin: 0 50%;
+}
+.nav-right-text, .nav-left-text{
+    color: #ffffff;
+    opacity: .5;
+    cursor: pointer;
+    transition: opacity 3s
+}
+.nav-home{
+    visibility: hidden;
+}
+
+.nav-right-wrapper, .nav-left-wrapper {
+    display: inline-block;
+    padding: 10px;
+}
+.nav-transform {
+    z-index: 1000001;
+    position: absolute;
+    top: 50%;
+}
+
+#infoMenu li a {
+    color: #fff;
+}
+
+#section2 h1{
+    color: #333;
+}
+.fp-slidesNav.bottom{
+    bottom: 25px;
+}
+
+#fp-nav ul li a span, 
+.fp-slidesNav ul li a span {
+    background: white;
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+}
+      
+#fp-nav ul li a.active span, 
+.fp-slidesNav ul li a.active span, 
+#fp-nav ul li:hover a.active span, 
+.fp-slidesNav ul li:hover a.active span {
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    background: transparent;
+    box-sizing: border-box;
+    border: 1px solid #24221F;
+}
+
+
 @keyframes fadeIn{
     0% { opacity:0;}
     100% { opacity: 100%;}

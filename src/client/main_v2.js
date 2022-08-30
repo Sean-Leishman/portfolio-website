@@ -24,19 +24,59 @@ import fullpage from 'fullpage.js';
 
 const fp = new fullpage('#fullpage', {
 	//options here
-	//anchors:['about','project-1','project-2','project-3','project-4','project-5'],
+	anchors:['about','project-1','project-2','project-3','project-4','project-5'],
+    slidesNavigation:true,
+    controlArrows: false,
     fixedElements: '.webgl',
     scrollOverflow: true,
+    navigation:true,
     licenseKey:'30AKK-H9O08-A2J18-L0PHH-RQRPO',
-    onLeave: function(origin, destination, direction, trigger){
+    afterLoad: function(anchorLink, index) {
+        let fp_nav = document.getElementById('fp-nav');
+        console.log("origin",index, fp_nav)
+        if (index.index == 0) {
+            console.log("hide")
+            fp_nav.style.visibility = 'hidden';
+        }
+    },
+    onLeave: function(origin,destination,direction,trigger) {
         onLeave(origin,destination,direction,trigger);
+        let fp_nav = document.getElementById('fp-nav');
+        if(origin.index == 0) {
+            console.log("show")
+            fp_nav.style.visibility = 'visible';
+        }
+    },
+    onSlideLeave: function(section, origin, destination, direction, trigger){
+        console.log(origin,destination)
+        let leftClick = document.getElementsByClassName('nav-left-text')[0];
+        let rightClick = document.getElementsByClassName('nav-right-text')[0];
+        if (destination.index == 1){
+            rightClick.innerText = "Contact Me";
+            leftClick.innerText = "About";
+        }
+        if (destination.index == 2){
+            leftClick.innerText = "Home";
+            rightClick.innerText = "";
+        }
+        if (destination.index == 0){
+            leftClick.innerText = "";
+            rightClick.innerText = "Home"
+        }
     },
     afterRender: function(){
         //renderModels();
     },
     scrollingSpeed: 2000
 });
-
+document.getElementsByClassName('nav-left-text')[0].addEventListener('click', () => {
+    console.log("click about")
+    fullpage_api.moveSlideLeft();
+});
+document.getElementsByClassName('nav-right-text')[0].addEventListener('click', () => {
+    console.log("click home")
+    fullpage_api.moveSlideRight();
+});
 const cursor = {x:0,y:0}
 
 let camera, scene, renderer, raycaster, frustum,loader,clock;
@@ -189,9 +229,6 @@ function init(hdrmap){
 
     clock = new THREE.Clock();
     raycaster = new THREE.Raycaster();
-
-    const axesHelper = new THREE.AxesHelper( 100 );
-    scene.add( axesHelper );
 
     renderer = new THREE.WebGLRenderer({canvas: canvas, alpha: true, antialias: true});
     renderer.setPixelRatio( window.devicePixelRatio );
@@ -446,7 +483,7 @@ function init(hdrmap){
         //pawnModel.children[0].material.emissive = new THREE.Color(0x00ffff);
         graphModel.name = "Graph";
         graphModel.visible = false;
-        graphModel.correct_scale = {x:100, y:100, z:100}
+        graphModel.correct_scale = {x:50, y:50, z:50}
         graphModel.scale_ratio = {x:10, y:10, z:10}
         graphModel.correct_position = {x: 100,y:-50};
         graphModel.rotation.set(0,-0.2,0)
