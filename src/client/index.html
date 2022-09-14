@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>Portfolio</title>
         <meta name='viewport' content="width=device-width, initial-scale=1">
+        <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.3/iconify-icon.min.js"></script>
     </head>
     <body>
         <!--<div class='parallax'>
@@ -11,85 +12,165 @@
         </div>
         -->
         <div class = 'container'>
-        <div id='fullpage'>
-        <canvas class='webgl'></canvas>
-        <img class='logo'> 
-        <div class='section content'>
-            <div class='nav'>
-                <div class='nav-left nav-transform'>
-                    <div class='nav-left-wrapper'>
-                        <h3 class='nav-left-text'>About</h3>
+            <div class='section-navigation-wrapper'>
+                    <ul class='section-navigation'>
+                        <li><a class='section-navigation-text' href='#about/#slide2'>Home</a></li>
+                        <li><a class='section-navigation-text' href='#project-1'>Chess</a></li>
+                        <li><a class='section-navigation-text' href='#project-2'>Horse Betting Model</a></li>
+                        <li><a class='section-navigation-text' href='#project-3'>Path Finding Algorithm</a></li>
+                        <li><a class='section-navigation-text' href='#project-4'>Sort Algorithm Visualiser</a></li>
+                        <li><a class='section-navigation-text' href='#project-5'>Portfolio Website</a></li>
+                        <li><a class='section-navigation-text' href='#about'>Skills</a></li>
+                        <li><a class='section-navigation-text' href='#about'>Education</a></li>
+                        <li><a class='section-navigation-text' href='#about/slide3'>Contact Me</a></li>
+                    </ul>
+            </div>
+
+            <div id='fullpage'>
+            <canvas class='webgl'></canvas>
+            <img class='logo'> 
+            <div class='section title-page'>
+                <div class='nav'>
+                    <div class='nav-left nav-transform'>
+                        <div class='nav-left-wrapper'>
+                            <h3 class='nav-left-text'>About</h3>
+                        </div>
+                    </div>
+                    <div class='nav-right nav-transform'>
+                        <div class='nav-right-wrapper'>
+                            <h3 class='nav-right-text'>Contact Me</h3>
+                        </div>
                     </div>
                 </div>
-                <div class='nav-right nav-transform'>
-                    <div class='nav-right-wrapper'>
-                        <h3 class='nav-right-text'>Home</h3>
+                <div class='slide' id='slide1' data-anchor="slide1">
+                    <div>
+                        <h1>About2</h1>        
+                        <div class='skills project'>
+                            <div class='project-left'>
+                            <h2 class='projectHeading'>My Skills</h2>
+                            <iconify-icon icon="logos:javascript" width="90" height="90"></iconify-icon>
+                            </div>
+                        </div>
+                        <div class='education project'>
+                            <div class='project-left'>
+                            <h2 class='projectHeading'>Education</h2>
+                            <iconify-icon icon="logos:javascript" width="90" height="90"></iconify-icon>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div class='slide active' id='slide2' data-anchor='slide2'>
+                    <div>
+                        <h2 class='projectHeading'>Hi I'm Sean</h2>
+                        <p>An Undergraduate Computer Science Student at the University of Edinburgh</p>
+                    </div>
+                </div>
+                <div class='slide' id='slide3' data-anchor="slide3">
+                    <div>
+                        <h1>Contact Us</h1>
+                    </div>
+                </div>
+                
+                <div id="scrollProgress"></div>
             </div>
-            <div class='slide' id='slide1' data-anchor="slide1">
-                <h1>About2</h1>
+            <div class='section content project project-1'>
+                <div class='project-left'>
+                    <h2 class='projectHeading'>Chess</h2>
+                    <span class='description-wrapper'>
+                        <p class='description'>Python program used to build the game of chess that can be played with two players
+                            or against a custom built chess engine.
+                        </p>
+                    </span>
+                    <div class='image-slideshow'></div>
+                    <!--<img class='chess-example' /> -->
+                    <ul class='tech-list'>
+                        <p class='tech-list-text'>Made with:</p>
+                        <li><iconify-icon icon="logos:python"></iconify-icon></li>
+                    </ul>
+                    <a href='https://github.com/Sean-Leishman/Chess' class="btn-blue btn-small"><iconify-icon class='github-icon' icon="logos:github-icon"></iconify-icon>Code</a>
+                </div>
             </div>
-            <div class='slide active' id='slide2' data-anchor='slide2'>
-                <h2 class='projectHeading'>Hi I'm Sean</h2>
-                <p>An Undergraduate Computer Science Student at the University of Edinburgh</p>
+
+            <div class='section content project project-2'>
+                <div class='project-left'>
+                    <h2 class='projectHeading'>Horse Betting Model</h2>
+                    <span class='description-wrapper'>
+                        <p class='description'>Uses a Recurrent Neural Network to predict the outcome of UK horse races
+                            with over 1 million horse races scraped from the Racing Post website. 
+                        </p>
+                    </span>
+                    <div class='image-slideshow'></div>
+                    <img src='./assets/images/chess-gameplay-2.png' />
+                    <ul class='tech-list'>
+                        <p class='tech-list-text'>Made with:</p>
+                        <li><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1.01em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 255" class="iconify" data-icon="logos:python" data-inline="false" style="transform: rotate(360deg);"><defs><linearGradient id="IconifyId-1820c03492b-4a8767-19" x1="12.959%" x2="79.639%" y1="12.039%" y2="78.201%"><stop offset="0%" stop-color="#387EB8"></stop><stop offset="100%" stop-color="#366994"></stop></linearGradient><linearGradient id="IconifyId-1820c03492b-4a8767-20" x1="19.128%" x2="90.742%" y1="20.579%" y2="88.429%"><stop offset="0%" stop-color="#FFE052"></stop><stop offset="100%" stop-color="#FFC331"></stop></linearGradient></defs><path fill="url(#IconifyId-1820c03492b-4a8767-19)" d="M126.916.072c-64.832 0-60.784 28.115-60.784 28.115l.072 29.128h61.868v8.745H41.631S.145 61.355.145 126.77c0 65.417 36.21 63.097 36.21 63.097h21.61v-30.356s-1.165-36.21 35.632-36.21h61.362s34.475.557 34.475-33.319V33.97S194.67.072 126.916.072ZM92.802 19.66a11.12 11.12 0 0 1 11.13 11.13a11.12 11.12 0 0 1-11.13 11.13a11.12 11.12 0 0 1-11.13-11.13a11.12 11.12 0 0 1 11.13-11.13Z"></path><path fill="url(#IconifyId-1820c03492b-4a8767-20)" d="M128.757 254.126c64.832 0 60.784-28.115 60.784-28.115l-.072-29.127H127.6v-8.745h86.441s41.486 4.705 41.486-60.712c0-65.416-36.21-63.096-36.21-63.096h-21.61v30.355s1.165 36.21-35.632 36.21h-61.362s-34.475-.557-34.475 33.32v56.013s-5.235 33.897 62.518 33.897Zm34.114-19.586a11.12 11.12 0 0 1-11.13-11.13a11.12 11.12 0 0 1 11.13-11.131a11.12 11.12 0 0 1 11.13 11.13a11.12 11.12 0 0 1-11.13 11.13Z"></path></svg></li>
+                        <li><iconify-icon icon="logos:tensorflow"></iconify-icon></li>
+                    </ul>
+                    <a href='https://github.com/Sean-Leishman/Horse_Betting_Model' class="btn-blue btn-small"><iconify-icon class='github-icon' icon="logos:github-icon"></iconify-icon>Code</a>
+                </div>
             </div>
-            <div class='slide' id='slide3' data-anchor="slide3">
-                <h1>Contact Us</h1>
+
+            <div class='section content project project-3'>
+                <div class='project-left'>
+                    <h2 class='projectHeading'>Path finding Visualiser</h2>
+                    <span class='description-wrapper'>
+                        <p class='description'>
+                            A program made using p5.js that generates a random maze and can 
+                            illustrate the A* algorithm finding the shorted path out of the maze.
+                        </p>
+                    </span>
+                    <ul class='tech-list'>
+                        <p class='tech-list-text'>Made with:</p>
+                        <li><iconify-icon icon="logos:p5js" width="32" height="32"></iconify-icon></li>
+                        <li><iconify-icon icon="logos:javascript"></iconify-icon></li>
+                    </ul>
+                    <a href='https://github.com/Sean-Leishman/PathFindingAlgorithm' class="btn-blue btn-small"><iconify-icon class='github-icon' icon="logos:github-icon"></iconify-icon>Code</a>
+                </div>
+            </div>
+
+            <div class='section content project project-4'>
+                <div class='project-left'>
+                    <h2 class='projectHeading'>Sort Algorithm Visualiser</h2>
+                    <span class='description-wrapper'>
+                        <p class='description'>
+                            A website made using React. The website is purely frontend orientated and is hosted on
+                            Vercel currently. Currently merge sort, bubble sort and insertion sort are implemented
+                            where the user can choose to sort a bar graph or a colour wheel.
+                        </p>
+                    </span>
+                    <ul class='tech-list'>
+                        <p class='tech-list-text'>Made with:</p>
+                        <li><iconify-icon icon="logos:react"></iconify-icon></iconify-icon></li>
+                        <li><iconify-icon icon="logos:javascript"></iconify-icon></li>
+                    </ul>
+                    
+                    <a href='https://refined-sort-algorithm-visualizer.vercel.app/' class="btn-blue btn-small"><iconify-icon class='github-icon' icon="gg:website"></iconify-icon>Website</a>
+                    <a href='https://github.com/Sean-Leishman/RefinedSortAlgorithmVisualizer' class="btn-blue btn-small"><iconify-icon class='github-icon' icon="logos:github-icon"></iconify-icon>Code</a>
+                </div>
+            </div>
+
+            <div class='section content project project-5'>
+                <div class='project-left'>
+                    <h2 class='projectHeading'>Portolio Website</h2>
+                    <span class='description-wrapper'>
+                        <p class='description'>
+                            A website that implements some experimental 3d features using three.js. Most models
+                            were handmade in Blender and then animated. fullpage.js is used to implement the full page
+                            scrolling effects.
+                        </p>
+                    </span>
+                    <ul class='tech-list'>
+                        <p class='tech-list-text'>Made with:</p>
+                        <li><iconify-icon icon="logos:threejs"></iconify-icon></li>
+                        <li><iconify-icon icon="logos:javascript"></iconify-icon></li>
+                    </ul>
+                    <a href='https://github.com/Sean-Leishman/portfolio-website' class="btn-blue btn-small"><iconify-icon class='github-icon' icon="logos:github-icon"></iconify-icon>Code</a>
+                </div>
             </div>
             
-            <div id="scrollProgress"></div>
         </div>
-        <div class='section content project project-1'>
-            <div class='project-left'>
-                <h2 class='projectHeading'>Chess</h2>
-                <p class='description'>Python program used to build the game of chess.</p>
-                <div class='image-slideshow'></div>
-                <!--<img class='chess-example' /> -->
-                <ul class='tech-list'>
-                    <p>Made with:</p>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1.01em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 255" class="iconify" data-icon="logos:python" data-inline="false" style="transform: rotate(360deg);"><defs><linearGradient id="IconifyId-1820c03492b-4a8767-19" x1="12.959%" x2="79.639%" y1="12.039%" y2="78.201%"><stop offset="0%" stop-color="#387EB8"></stop><stop offset="100%" stop-color="#366994"></stop></linearGradient><linearGradient id="IconifyId-1820c03492b-4a8767-20" x1="19.128%" x2="90.742%" y1="20.579%" y2="88.429%"><stop offset="0%" stop-color="#FFE052"></stop><stop offset="100%" stop-color="#FFC331"></stop></linearGradient></defs><path fill="url(#IconifyId-1820c03492b-4a8767-19)" d="M126.916.072c-64.832 0-60.784 28.115-60.784 28.115l.072 29.128h61.868v8.745H41.631S.145 61.355.145 126.77c0 65.417 36.21 63.097 36.21 63.097h21.61v-30.356s-1.165-36.21 35.632-36.21h61.362s34.475.557 34.475-33.319V33.97S194.67.072 126.916.072ZM92.802 19.66a11.12 11.12 0 0 1 11.13 11.13a11.12 11.12 0 0 1-11.13 11.13a11.12 11.12 0 0 1-11.13-11.13a11.12 11.12 0 0 1 11.13-11.13Z"></path><path fill="url(#IconifyId-1820c03492b-4a8767-20)" d="M128.757 254.126c64.832 0 60.784-28.115 60.784-28.115l-.072-29.127H127.6v-8.745h86.441s41.486 4.705 41.486-60.712c0-65.416-36.21-63.096-36.21-63.096h-21.61v30.355s1.165 36.21-35.632 36.21h-61.362s-34.475-.557-34.475 33.32v56.013s-5.235 33.897 62.518 33.897Zm34.114-19.586a11.12 11.12 0 0 1-11.13-11.13a11.12 11.12 0 0 1 11.13-11.131a11.12 11.12 0 0 1 11.13 11.13a11.12 11.12 0 0 1-11.13 11.13Z"></path></svg></li>
-                </ul>
-                <a href='' class="btn-blue btn-small">Demo</a>
-                <a href='' class="btn-blue btn-small">Code</a>
-            </div>
-        </div>
-
-        <div class='section content project project-2'>
-            <div class='project-left'>
-                <h2 class='projectHeading'>Horse Betting Model</h2>
-                <p class='description'>Python program used to build a horse race betting model</p>
-                <div class='image-slideshow'></div>
-                <img src='./assets/images/chess-gameplay-2.png' />
-                <ul class='tech-list'>
-                    <p>Made with:</p>
-                    <li><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1.01em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 255" class="iconify" data-icon="logos:python" data-inline="false" style="transform: rotate(360deg);"><defs><linearGradient id="IconifyId-1820c03492b-4a8767-19" x1="12.959%" x2="79.639%" y1="12.039%" y2="78.201%"><stop offset="0%" stop-color="#387EB8"></stop><stop offset="100%" stop-color="#366994"></stop></linearGradient><linearGradient id="IconifyId-1820c03492b-4a8767-20" x1="19.128%" x2="90.742%" y1="20.579%" y2="88.429%"><stop offset="0%" stop-color="#FFE052"></stop><stop offset="100%" stop-color="#FFC331"></stop></linearGradient></defs><path fill="url(#IconifyId-1820c03492b-4a8767-19)" d="M126.916.072c-64.832 0-60.784 28.115-60.784 28.115l.072 29.128h61.868v8.745H41.631S.145 61.355.145 126.77c0 65.417 36.21 63.097 36.21 63.097h21.61v-30.356s-1.165-36.21 35.632-36.21h61.362s34.475.557 34.475-33.319V33.97S194.67.072 126.916.072ZM92.802 19.66a11.12 11.12 0 0 1 11.13 11.13a11.12 11.12 0 0 1-11.13 11.13a11.12 11.12 0 0 1-11.13-11.13a11.12 11.12 0 0 1 11.13-11.13Z"></path><path fill="url(#IconifyId-1820c03492b-4a8767-20)" d="M128.757 254.126c64.832 0 60.784-28.115 60.784-28.115l-.072-29.127H127.6v-8.745h86.441s41.486 4.705 41.486-60.712c0-65.416-36.21-63.096-36.21-63.096h-21.61v30.355s1.165 36.21-35.632 36.21h-61.362s-34.475-.557-34.475 33.32v56.013s-5.235 33.897 62.518 33.897Zm34.114-19.586a11.12 11.12 0 0 1-11.13-11.13a11.12 11.12 0 0 1 11.13-11.131a11.12 11.12 0 0 1 11.13 11.13a11.12 11.12 0 0 1-11.13 11.13Z"></path></svg></li>
-                </ul>
-                <a href='' class="btn-blue btn-small">Demo</a>
-                <a href='' class="btn-blue btn-small">Code</a>
-            </div>
-        </div>
-
-        <div class='section content project project-3'>
-            <div class='project-left'>
-                <h2 class='projectHeading'>Path finding Visualiser</h2>
-            </div>
-        </div>
-
-        <div class='section content project project-4'>
-            <div class='project-left'>
-                <h2 class='projectHeading'>Sort Algorithm Visualiser</h2>
-            </div>
-        </div>
-
-        <div class='section content project project-5'>
-            <div class='project-left'>
-                <h2 class='projectHeading'>Project 5</h2>
-            </div>
-        </div>
-        
     </div>
-    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     </body>
     <script src='../../dist/bundle.js';></script>
 </html>

@@ -22,62 +22,76 @@ import img from './assets/images/drawing.png';
 
 import fullpage from 'fullpage.js';
 
-const fp = new fullpage('#fullpage', {
-	//options here
-	anchors:['about','project-1','project-2','project-3','project-4','project-5'],
-    slidesNavigation:true,
-    controlArrows: false,
-    fixedElements: '.webgl',
-    scrollOverflow: true,
-    navigation:true,
-    licenseKey:'30AKK-H9O08-A2J18-L0PHH-RQRPO',
-    afterLoad: function(anchorLink, index) {
-        let fp_nav = document.getElementById('fp-nav');
-        console.log("origin",index, fp_nav)
-        if (index.index == 0) {
-            console.log("hide")
-            fp_nav.style.visibility = 'hidden';
-        }
-    },
-    onLeave: function(origin,destination,direction,trigger) {
-        onLeave(origin,destination,direction,trigger);
-        let fp_nav = document.getElementById('fp-nav');
-        if(origin.index == 0) {
-            console.log("show")
-            fp_nav.style.visibility = 'visible';
-        }
-    },
-    onSlideLeave: function(section, origin, destination, direction, trigger){
-        console.log(origin,destination)
-        let leftClick = document.getElementsByClassName('nav-left-text')[0];
-        let rightClick = document.getElementsByClassName('nav-right-text')[0];
-        if (destination.index == 1){
-            rightClick.innerText = "Contact Me";
-            leftClick.innerText = "About";
-        }
-        if (destination.index == 2){
-            leftClick.innerText = "Home";
-            rightClick.innerText = "";
-        }
-        if (destination.index == 0){
-            leftClick.innerText = "";
-            rightClick.innerText = "Home"
-        }
-    },
-    afterRender: function(){
-        //renderModels();
-    },
-    scrollingSpeed: 2000
+import $ from 'jquery';
+
+jQuery(document).ready(function() {
+    console.log("Document ready")
+    const fp = new fullpage('#fullpage', {
+        //options here
+        //anchors:['about','project-1','project-2','project-3','project-4','project-5'],
+        slidesNavigation:false,
+        controlArrows: false,
+        fixedElements: '.webgl',
+        scrollOverflow: true,
+        navigation:false,
+        licenseKey:'30AKK-H9O08-A2J18-L0PHH-RQRPO',
+        responsiveWidth:window.innerWidth,
+        afterLoad: function(origin, destination, direction, trigger) {
+            console.log("after load",origin,destination,trigger,this)
+        },
+        beforeLeave(origin, destination, direction, trigger){
+            console.log("Left Page",origin.index,destination.index)
+            let fp_nav = document.getElementById('fp-nav');
+            let nav = document.getElementsByClassName('section-navigation-wrapper')[0];
+            if(origin.index == 0  || destination.index == 0) {
+                nav.classList.toggle("visible");
+                //fp_nav.style.visibility = 'visible';
+            }
+        },
+        onLeave: function(origin,destination,direction,trigger) {
+            onLeave(origin,destination,direction,trigger);
+        },
+        onSlideLeave: function(section, origin, destination, direction, trigger){
+            console.log(origin,destination)
+            let leftClick = document.getElementsByClassName('nav-left-text')[0];
+            let rightClick = document.getElementsByClassName('nav-right-text')[0];
+            if (destination.index == 1){
+                rightClick.innerText = "Contact Me";
+                leftClick.innerText = "About";
+            }
+            if (destination.index == 2){
+                leftClick.innerText = "Home";
+                rightClick.innerText = "";
+            }
+            if (destination.index == 0){
+                leftClick.innerText = "";
+                rightClick.innerText = "Home"
+            }
+        },
+        afterRender: function(){
+            console.log("Rendered")
+            moveTo(2,0);
+        },
+        afterResponsive: function(isResponsive){
+            console.log("Responding")
+            this.responsiveWidth = window.innerWidth;
+        },
+        scrollingSpeed: 2000
+    });
+    document.getElementsByClassName('nav-left-text')[0].addEventListener('click', () => {
+        console.log("click about")
+        fullpage_api.moveSlideLeft();
+    });
+    document.getElementsByClassName('nav-right-text')[0].addEventListener('click', () => {
+        console.log("click home")
+        fullpage_api.moveSlideRight();
+    });   
+
+    document.querySelectorAll('.section-navigation-text').forEach(a => addEventListener('click', (event) => {
+        console.log(a,event)
+    }))
 });
-document.getElementsByClassName('nav-left-text')[0].addEventListener('click', () => {
-    console.log("click about")
-    fullpage_api.moveSlideLeft();
-});
-document.getElementsByClassName('nav-right-text')[0].addEventListener('click', () => {
-    console.log("click home")
-    fullpage_api.moveSlideRight();
-});
-const cursor = {x:0,y:0}
+const cursor = {x:0,y:0};
 
 let camera, scene, renderer, raycaster, frustum,loader,clock;
 let pawnModel,pawnMixer,pawnAction,pawnAnimations;
@@ -174,12 +188,12 @@ const MODEL_MAIN_STATE = {
 let previous_page;
 let current_page = 0;
 let total_pages = 6;
-let page_transitions = {0: {1:[MAIN_STATE.BALL_TO_MODEL]}, 
-                        1: {0:[MAIN_STATE.MODEL_TO_BALL],2:[MAIN_STATE.MODEL_TO_MODEL]}, 
-                        2: {1: [MAIN_STATE.MODEL_TO_MODEL], 3:[MAIN_STATE.MODEL_TO_MODEL]},
-                        3: {2: [MAIN_STATE.MODEL_TO_MODEL], 4: [MAIN_STATE.MODEL_TO_MODEL]},
-                        4: {3: [MAIN_STATE.MODEL_TO_MODEL], 5: [MAIN_STATE.MODEL_TO_MODEL]},
-                        5: {4: [MAIN_STATE.MODEL_TO_MODEL], 6: [MAIN_STATE.MODEL_TO_BALL]},
+let page_transitions = {0: {1:[MAIN_STATE.BALL_TO_MODEL],2:[MAIN_STATE.BALL_TO_MODEL],3:[MAIN_STATE.BALL_TO_MODEL],4:[MAIN_STATE.BALL_TO_MODEL],1:[MAIN_STATE.BALL_TO_MODEL],5:[MAIN_STATE.BALL_TO_MODEL]}, 
+                        1: {0:[MAIN_STATE.MODEL_TO_BALL],1:[MAIN_STATE.MODEL_TO_MODEL],2:[MAIN_STATE.MODEL_TO_MODEL],3: [MAIN_STATE.MODEL_TO_MODEL], 4: [MAIN_STATE.MODEL_TO_MODEL], 5: [MAIN_STATE.MODEL_TO_MODEL]}, 
+                        2: {0:[MAIN_STATE.MODEL_TO_BALL],1:[MAIN_STATE.MODEL_TO_MODEL],2:[MAIN_STATE.MODEL_TO_MODEL],3: [MAIN_STATE.MODEL_TO_MODEL], 4: [MAIN_STATE.MODEL_TO_MODEL], 5: [MAIN_STATE.MODEL_TO_MODEL]},
+                        3: {0:[MAIN_STATE.MODEL_TO_BALL],1:[MAIN_STATE.MODEL_TO_MODEL],2:[MAIN_STATE.MODEL_TO_MODEL],3: [MAIN_STATE.MODEL_TO_MODEL], 4: [MAIN_STATE.MODEL_TO_MODEL], 5: [MAIN_STATE.MODEL_TO_MODEL]},
+                        4: {0:[MAIN_STATE.MODEL_TO_BALL],1:[MAIN_STATE.MODEL_TO_MODEL],2:[MAIN_STATE.MODEL_TO_MODEL],3: [MAIN_STATE.MODEL_TO_MODEL], 4: [MAIN_STATE.MODEL_TO_MODEL], 5: [MAIN_STATE.MODEL_TO_MODEL]},
+                        5: {0:[MAIN_STATE.MODEL_TO_BALL],1:[MAIN_STATE.MODEL_TO_MODEL],2:[MAIN_STATE.MODEL_TO_MODEL],3: [MAIN_STATE.MODEL_TO_MODEL], 4: [MAIN_STATE.MODEL_TO_MODEL], 5: [MAIN_STATE.MODEL_TO_MODEL]},
                         6: {5: [MAIN_STATE.BALL_TO_MODEL]},
                     }
 let models;
@@ -1152,6 +1166,7 @@ function velocity_between_points(origin,target){
     return {x:target.position.x - origin.position.x, y:target.position.y - origin.position.y, 
         z:target.position.z - origin.position.z}
 }
+
 
 /**
  * Get current browser viewpane heigtht

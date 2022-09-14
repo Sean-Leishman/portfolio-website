@@ -7,37 +7,60 @@ body,html{
     margin:0;
     padding:0;
 }
+section{
+    position:absolute;
+    display:inline-block;
+}
 .webgl
 {
     position: fixed;
     top: 0;
     left: 0;
 }
-
+.container{
+    font-family: 'Cabin', sans-serif;
+    color: #ffeded;
+}
 #fullpage{
     width:100%;
     height: 100%;
-    z-index:3
-    /*scroll-snap-type: y mandatory;
-    overflow-y: scroll;*/
+    z-index:3;
 }
 .disable-scroll{
     /*overflow-y: hidden;*/
 }
-
+.slide{
+    overflow:hidden;
+}
+#fullpage .title-page{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
 #fullpage .content{
     display:flex;
     justify-content: center;
     align-items: center;
+    flex-direction:row;
     width:100vw;
     height: 100vh;
     position: relative;
-    font-family: 'Cabin', sans-serif;
-    color: #ffeded;
-    text-transform: uppercase;
     /*scroll-snap-align: start;*/
 }
 
+.description-wrapper{
+}
+.description{
+    font-size: 14px
+}
+.tech-list{
+    
+}
+.tech-list-text{
+    font-size:14px;
+    margin-right:1rem;
+    opacity:0.5;
+}
 .parallax{
     background: url("./assets/images/river_forest_sunset_144468_3840x2160.jpg");
     height: 1000px;
@@ -81,7 +104,8 @@ body,html{
 .project-left{
     width: 25%;
     height: 50vh;
-    justify-content: left;
+    position:relative;
+    justify-content: right;
 }
 .tech-list{
     font-size: 1.5rem;
@@ -108,6 +132,12 @@ h2 {
 }
 .btn-small {
     padding: 0.5rem 1rem;
+    text-decoration:none;
+}
+.github-icon {
+    margin-right:0.4rem;
+    margin-top:auto;
+    margin-bottom:auto;
 }
 .btn-blue {
     color: white;
@@ -155,13 +185,29 @@ h2 {
     top: 50%;
 }
 
-#infoMenu li a {
+#infoMenu a {
     color: #fff;
+}
+
+li{
+    margin-right:1rem;
+    opacity:1;
 }
 
 #section2 h1{
     color: #333;
 }
+.fp-slides{
+    width:100%
+}
+
+.slide{
+    display:flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+/*
 .fp-slidesNav.bottom{
     bottom: 25px;
 }
@@ -185,12 +231,54 @@ h2 {
     box-sizing: border-box;
     border: 1px solid #24221F;
 }
+*/
 
-
-@keyframes fadeIn{
-    0% { opacity:0;}
-    100% { opacity: 100%;}
+.section-navigation-wrapper{
+    position:fixed;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height:100%;
+    right:0;
+    z-index:9;
+    color: #f2f2f2;
+    padding: 20px 0 0 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 2s, visibility 2s;
 }
+.section-navigation{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.section-navigation li a{
+    color: #ffffff;
+  padding: 8px 16px;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 250ms;
+}
+/* Change the link color on hover */
+.section-navigation li a:hover {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+.section-navigation-wrapper.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+@keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
 @media (prefers-reduced-motion: no-preference){
     .animated{
         animation: fadeIn 10s;
