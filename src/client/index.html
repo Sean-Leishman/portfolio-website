@@ -14,22 +14,22 @@
         <div class = 'container'>
             <div class='section-navigation-wrapper'>
                     <ul class='section-navigation'>
-                        <li><a class='section-navigation-text' href='#about/#slide2'>Home</a></li>
-                        <li><a class='section-navigation-text' href='#project-1'>Chess</a></li>
-                        <li><a class='section-navigation-text' href='#project-2'>Horse Betting Model</a></li>
-                        <li><a class='section-navigation-text' href='#project-3'>Path Finding Algorithm</a></li>
-                        <li><a class='section-navigation-text' href='#project-4'>Sort Algorithm Visualiser</a></li>
-                        <li><a class='section-navigation-text' href='#project-5'>Portfolio Website</a></li>
-                        <li><a class='section-navigation-text' href='#about'>Skills</a></li>
-                        <li><a class='section-navigation-text' href='#about'>Education</a></li>
-                        <li><a class='section-navigation-text' href='#about/slide3'>Contact Me</a></li>
+                        <li><a class='section-navigation-text' data-section='about' data-slide='slide2'>Home</a></li>
+                        <li><a class='section-navigation-text' data-section='project-1' data-slide=0>Chess</a></li>
+                        <li><a class='section-navigation-text' data-section='project-2' data-slide=0>Horse Betting Model</a></li>
+                        <li><a class='section-navigation-text' data-section='project-3' data-slide=0>Path Finding Algorithm</a></li>
+                        <li><a class='section-navigation-text' data-section='project-4' data-slide=0>Sort Algorithm Visualiser</a></li>
+                        <li><a class='section-navigation-text' data-section='project-5' data-slide=0>Portfolio Website</a></li>
+                        <li><a class='section-navigation-text' data-section='about' data-slide='slide1'>Skills</a></li>
+                        <li><a class='section-navigation-text' data-section='about' data-slide='slide1'>Education</a></li>
+                        <li><a class='section-navigation-text' data-section='about' data-slide='slide3'>Contact Me</a></li>
                     </ul>
             </div>
 
             <div id='fullpage'>
             <canvas class='webgl'></canvas>
             <img class='logo'> 
-            <div class='section title-page'>
+            <div class='section title-page' data-anchor="about">
                 <div class='nav'>
                     <div class='nav-left nav-transform'>
                         <div class='nav-left-wrapper'>
@@ -73,7 +73,7 @@
                 
                 <div id="scrollProgress"></div>
             </div>
-            <div class='section content project project-1'>
+            <div class='section content project project-1' data-anchor="project-1">
                 <div class='project-left'>
                     <h2 class='projectHeading'>Chess</h2>
                     <span class='description-wrapper'>
@@ -91,7 +91,7 @@
                 </div>
             </div>
 
-            <div class='section content project project-2'>
+            <div class='section content project project-2' data-anchor="project-2">
                 <div class='project-left'>
                     <h2 class='projectHeading'>Horse Betting Model</h2>
                     <span class='description-wrapper'>
@@ -110,7 +110,7 @@
                 </div>
             </div>
 
-            <div class='section content project project-3'>
+            <div class='section content project project-3' data-anchor="project-3">
                 <div class='project-left'>
                     <h2 class='projectHeading'>Path finding Visualiser</h2>
                     <span class='description-wrapper'>
@@ -128,7 +128,7 @@
                 </div>
             </div>
 
-            <div class='section content project project-4'>
+            <div class='section content project project-4' data-anchor="project-4">
                 <div class='project-left'>
                     <h2 class='projectHeading'>Sort Algorithm Visualiser</h2>
                     <span class='description-wrapper'>
@@ -149,7 +149,7 @@
                 </div>
             </div>
 
-            <div class='section content project project-5'>
+            <div class='section content project project-5' data-anchor="project-5">
                 <div class='project-left'>
                     <h2 class='projectHeading'>Portolio Website</h2>
                     <span class='description-wrapper'>
@@ -170,7 +170,6 @@
             
         </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     </body>
     <script src='../../dist/bundle.js';></script>
 </html>
