@@ -18,8 +18,8 @@ async function init_fp() {
       fixedElements: ".webgl",
       scrollOverflow: true,
       navigation: false,
+      responsive:false,
       licenseKey: "30AKK-H9O08-A2J18-L0PHH-RQRPO",
-      responsiveWidth: window.innerWidth,
       afterLoad: function(origin, destination, direction, trigger) {
         console.log("after load", origin, destination, trigger, this);
       },
@@ -62,10 +62,6 @@ async function init_fp() {
       afterRender: function() {
         console.log("Rendered");
         //fullpage_api.moveTo('about',1)
-      },
-      afterResponsive: function(isResponsive) {
-        console.log("Responding");
-        this.responsiveWidth = window.innerWidth;
       },
       scrollingSpeed: 2000,
     });

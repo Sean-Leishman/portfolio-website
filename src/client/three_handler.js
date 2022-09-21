@@ -328,8 +328,8 @@ async function init(hdrmap, hdrEquirect) {
       logoModel.position.set(-50, -30, 0);
       logoModel.visible = false;
       logoModel.isModel = false;
-      scene.add(logoModel);
-      render();
+      //scene.add(logoModel);
+      //render();
       console.log(logoModel);
       //pawnMixer.addEventListener('finished', setNoScroll)
     },
@@ -570,7 +570,7 @@ async function animate() {
   //update_pages();
   switch (main_state) {
     case MAIN_STATE.BALL_MODE:
-      enable_scroll();
+      //enable_scroll();
       animate_ball_motion(true);
       break;
     case MAIN_STATE.BALL_TO_MODEL:
@@ -723,6 +723,16 @@ async function animate() {
 }
 function render() {
   renderer.render(scene, camera);
+  const canvas = renderer.domElement;
+  camera.aspect = canvas.clientWidth / canvas.clientHeight;
+  camera.updateProjectionMatrix();
+
+  if (canvas.clientWidth < 700){
+    scene.toDisplay = false;
+  }
+  else{
+    scene.toDisplay = true;
+  }
 }
 
 function animate_ball_motion(is_boid_mode) {
@@ -819,6 +829,9 @@ function initMerge() {
   ball_merge_main_state = BALL_MERGE_MAIN_STATE.MERGE_FINISHED;
 }
 function displayModel() {
+  if (!scene.toDisplay){
+    return;
+  }
   [
     current_model,
     current_mixer,
@@ -826,6 +839,9 @@ function displayModel() {
     current_action,
   ] = get_current_model_details(current_model);
   console.log("current model", current_model, models);
+  if (!current_model){
+    return;
+  }
   current_mixer.removeEventListener("finished", reverse_animation_finished);
   let center_ball = scene.children.filter((val) => {
     return val.visible && val.isModel;
@@ -917,8 +933,6 @@ function onScroll() {
     return;
   }
   console.log("scrolling", current_scroll_percent);
-  document.getElementById("scrollProgress").innerText =
-    "Scroll Progress : " + current_scroll_percent.toFixed(2);
   //scroll_main_state = SCROLL_MAIN_STATE.HALF_SCROLLED;
   determine_scroll_direction();
   //console.log(scroll_main_state,animation_main_state,main_state,scroll_direction,previous_scroll_percent,current_scroll_percent)
@@ -934,7 +948,7 @@ function onScroll() {
         }
         if (current_page == 0 && logo_main_state == LOGO_MAIN_STATE.MIDDLE) {
           logo_main_state = LOGO_MAIN_STATE.CORNER;
-          animate_logo(true);
+          //animate_logo(true);
         }
         break;
       case MAIN_STATE.MODEL_MODE:
@@ -948,7 +962,7 @@ function onScroll() {
           model_break_main_state = MODEL_BREAK_MAIN_STATE.BREAK_START;
           if (current_page == 1 && logo_main_state == LOGO_MAIN_STATE.CORNER) {
             logo_main_state = LOGO_MAIN_STATE.MIDDLE;
-            animate_logo(false);
+            //animate_logo(false);
           }
         }
         break;
@@ -1166,9 +1180,9 @@ function generateBall(geometry) {
     )
   );
   object.scale.set(1, 1, 1);
-  object.position.x = Math.random() * 20 - 10;
-  object.position.y = Math.random() * 20 - 10;
-  object.position.z = Math.random() * 20 - 10;
+  object.position.x = Math.random() * 300 - 150;
+  object.position.y = Math.random() * 300 - 150;
+  object.position.z = Math.random() * 300 - 150;
 
   object.original_scale = {
     x: object.scale.x,
@@ -1267,6 +1281,7 @@ function get_current_model_details() {
   } else if (current_model == graphModel) {
     return [graphModel, graphMixer, graphAnimations, graphAction];
   }
+  return [undefined, undefined, undefined, undefined]
 }
 
 function get_previous_model_details() {

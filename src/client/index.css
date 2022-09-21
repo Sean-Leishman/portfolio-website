@@ -1,11 +1,16 @@
 body,html{
     height: 100%;
     margin:0;
-    background-color: burlywood;
+    background-color: black;
+    cursor:default;
+    font-size: calc(0.5rem + 0.5vw)
 }
 *{
     margin:0;
     padding:0;
+}
+.no-scroll{
+    overflow: hidden;
 }
 section{
     position:absolute;
@@ -16,6 +21,9 @@ section{
     position: fixed;
     top: 0;
     left: 0;
+    width:100%;
+    height:100%;
+    display:block;
 }
 .container{
     font-family: 'Cabin', sans-serif;
@@ -51,25 +59,17 @@ section{
 .description-wrapper{
 }
 .description{
-    font-size: 14px
+    font-size: 1rem;
 }
 .tech-list{
     
 }
 .tech-list-text{
-    font-size:14px;
+    font-size:1rem;
     margin-right:1rem;
     opacity:0.5;
 }
-.parallax{
-    background: url("./assets/images/river_forest_sunset_144468_3840x2160.jpg");
-    height: 1000px;
 
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
 
 .projectHeading{
     color:white;
@@ -85,24 +85,17 @@ section{
 }
 
 .logo{
-    width:75px;
-    height:75px;
+    width:4rem;
+    height:4rem;
     display: inline-block;
     position:fixed;
     z-index: 1;
-    top:10px;
-    left:10px;
+    top:7.5rem;
+    left:7.5rem;
 }
-#scrollProgress {
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-    z-index: 99;
-    font-size: 3vh;
-    color:white;
-}
+
 .project-left{
-    width: 25%;
+    width: 30%;
     height: 50vh;
     position:relative;
     justify-content: right;
@@ -113,7 +106,7 @@ section{
 }
 #introduction{
     color:white;
-    font-size: 100px;
+    font-size: 5rem;
     font-family: "Consolas";
     position: relative;
     top: 40%;
@@ -128,7 +121,7 @@ section{
 */
 h2 {
     color:white;
-    font-size: 7vmin;
+    font-size: 3rem;
 }
 .btn-small {
     padding: 0.5rem 1rem;
@@ -142,13 +135,13 @@ h2 {
 .btn-blue {
     color: white;
     background-color: #3b82f6;
-    border: 2px solid #3b82f6;
+    border: 0.125rem solid #3b82f6;
 }
 .btn, .btn-blue, .btn-dark, .btn-blue-outline {
     display: inline-block;
     padding: 0.8rem 1.5rem;
     transition: all 0.3s;
-    border-radius: 3px;
+    border-radius: 0.1875rem;
     border: none;
     cursor: pointer;
 }
@@ -156,12 +149,12 @@ h2 {
 
 }
 .nav-left{
-    left:40px;
+    left:2.5rem;
     transform: rotateZ(-90deg) translateX(-50%);
     transform-origin: 0 50%;
 }
 .nav-right{
-    right:40px;
+    right:2.5rem;
     transform: rotateZ(90deg) translateX(-50%);
     transform-origin: 0 50%;
 }
@@ -177,7 +170,7 @@ h2 {
 
 .nav-right-wrapper, .nav-left-wrapper {
     display: inline-block;
-    padding: 10px;
+    padding: 0.625rem;
 }
 .nav-transform {
     z-index: 99;
@@ -242,7 +235,7 @@ li{
     right:0;
     z-index:9;
     color: #f2f2f2;
-    padding: 20px 0 0 0;
+    padding: 1.25rem 0 0 0;
     opacity: 0;
     visibility: hidden;
     transition: opacity 2s, visibility 2s;
@@ -254,11 +247,12 @@ li{
 }
 .section-navigation li a{
     color: #ffffff;
-  padding: 8px 16px;
+  padding: 0.5rem 1rem;
   text-decoration: none;
   display: inline-block;
   transition: transform 250ms;
   cursor: pointer;
+  font-size: 0.8rem;
 }
 /* Change the link color on hover */
 .section-navigation li a:hover {
@@ -269,7 +263,15 @@ li{
     opacity: 1;
     visibility: visible;
 }
+.container{
+    opacity:0;
+    visibility: hidden;
+}
 
+.container.visible{
+    opacity:1;
+    visibility: visible;
+}
 #loading-screen{
 	position: absolute;
 	z-index: 99999;
@@ -291,11 +293,11 @@ li{
     position: relative;
     left: 50%;
     top: 50%;
-    width: 150px;
-    height: 150px;
-    margin: -75px 0 0 -75px;
+    width: 9rem;
+    height: 9rem;
+    margin: -4.6875rem 0 0 -4.6875rem;
     border-radius: 50%;
-    border: 3px solid transparent;
+    border: 0.1875rem solid transparent;
     border-top-color: #9370DB;
     -webkit-animation: spin 2s linear infinite;
     animation: spin 2s linear infinite;
@@ -303,12 +305,12 @@ li{
 #loader:before {
     content: "";
     position: absolute;
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    bottom: 5px;
+    top: 0.3125rem;
+    left: 0.3125rem;
+    right: 0.3125rem;
+    bottom: 0.3125rem;
     border-radius: 50%;
-    border: 3px solid transparent;
+    border: 0.3125rem* solid transparent;
     border-top-color: #BA55D3;
     -webkit-animation: spin 3s linear infinite;
     animation: spin 3s linear infinite;
@@ -316,12 +318,12 @@ li{
 #loader:after {
     content: "";
     position: absolute;
-    top: 15px;
-    left: 15px;
-    right: 15px;
-    bottom: 15px;
+    top: 0.9375rem;
+    left: 0.9375rem;
+    right: 0.9375rem;
+    bottom: 0.9375rem;
     border-radius: 50%;
-    border: 3px solid transparent;
+    border: 0.3125rem solid transparent;
     border-top-color: #FF00FF;
     -webkit-animation: spin 1.5s linear infinite;
     animation: spin 1.5s linear infinite;
@@ -367,3 +369,13 @@ li{
         opacity:100%;
     }
 }
+@media only screen and (max-width: 700px){
+    .section-navigation{
+        visibility: hidden;
+        opacity:0;
+    }
+    .project-left{
+        width:60%
+    }
+}
+

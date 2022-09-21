@@ -20,6 +20,7 @@ jQuery(document).ready(function() {
     //render();
   });
   console.log("Document ready");
+  console.log(window.innerWidth,window.innerHeight)
 
   //init();
   //animate();
@@ -27,4 +28,7 @@ jQuery(document).ready(function() {
 
 async function onLoaded(){
   document.getElementById('loader').style.display = "none";
+  document.getElementsByClassName('container')[0].style.opacity = 1;
+  document.getElementsByClassName('container')[0].style.visibility = 'visible';
+  document.body.classList.remove('no-scroll');
 }
