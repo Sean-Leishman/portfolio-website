@@ -26,6 +26,18 @@
                     </ul>
             </div>
 
+            <div id='arrowdown'>
+                <div id='arrowdown-trail'></div>
+                <div id="arrowdown-caps">
+                    <div class="rotateLeft">
+                      <div class="arrowdown-caps-one arrow-caps" style="transform: matrix(1, 0, 0, 1, 0, 0);"></div> 
+                    </div>
+                    <div class="rotateRight"> 
+                      <div class="arrowdown-caps-two arrow-caps" style="transform: matrix(1, 0, 0, 1, 0, 0);"></div>
+                    </div>
+                  </div>
+            </div>
+
             <div id='fullpage'>
             <canvas class='webgl'></canvas>
             <img class='logo'> 
@@ -42,22 +54,101 @@
                         </div>
                     </div>
                 </div>
-                <div class='slide' id='slide1' data-anchor="slide1">
-                    <div>
-                        <h1>About2</h1>        
-                        <div class='skills project'>
-                            <div class='project-left'>
-                            <h2 class='projectHeading'>My Skills</h2>
-                            <iconify-icon icon="logos:javascript" width="90" height="90"></iconify-icon>
+                <div class='slide' id='slide0' data-anchor="slide0">
+                    <div class='information-slide education project'>
+                        <h2 class='projectHeading'>Education</h2>
+                        <div class='education-ex'>
+                        <div class='image-col'>
+                        <img class='uoe-img'>
+                        </div>
+                        <div class='info-col'>
+                            <h4 class='year'>2020 - Current</h4>
+                            <h4>University of Edinburgh - Artificial Intelligence and Computer Science</h4>
+                            <ul>
+                                <li>Year 1
+                                    <ul>
+                                        <li>Introduction to Computation</li>
+                                        <li>Object Orientated Programming</li>
+                                        <li>Cognitive Science</li>
+                                    </ul>
+                                </li>
+                                <li>Year 2
+                                    <ul>
+                                        <li>Software Engineering and Proffesional Practice</li>
+                                        <li>Foundations of Data Science</li>
+                                        <li>Introduction to Algorithms and Data Structures</li>
+                                        <li>Reasoning and Agents</li>
+                                    </ul>
+                                </li>
+                            </ul>
                             </div>
                         </div>
-                        <div class='education project'>
-                            <div class='project-left'>
-                            <h2 class='projectHeading'>Education</h2>
-                            <iconify-icon icon="logos:javascript" width="90" height="90"></iconify-icon>
+                        <div class='education-ex'>
+                            <div class='image-col'>
+                                <img class='smu-img'>
+                            </div>
+                            <div class='info-col'>
+                                <h4 class='year'>2021 - Current</h4>
+                                <h4>Singapore Management University - Exchange</h4>
+                                <ul>
+                                    <li>Principles of Machine Learning</li>
+                                    <li>Natural Language Communication</li>
+                                    <li>Foundations of Cybersecurity</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class='slide content' id='slide1' data-anchor="slide1">
+                        <div class='information-slide'>
+                            <h2 class='projectHeading'>Skills</h2>
+                            <div id='skills-wrapper'>
+                                <div class='skill'>
+                                    <iconify-icon icon="logos:javascript" class='icon' width=5rem height=5rem></iconify-icon>
+                                    <p>Javascript</p>
+                                </div>
+                                <div class='skill'>
+                                    <iconify-icon icon="logos:react" class='icon' width=5rem height=5rem></iconify-icon>
+                                    <p>React</p>
+                                </div>
+                                <div class='skill'>
+                                    <iconify-icon icon="logos:python" class='icon' width=5rem height=5rem></iconify-icon>
+                                    <p>Python</p>
+                                </div>
+                                <div class='skill'>
+                                    <iconify-icon icon="logos:nodejs" class='icon' width=5rem height=5rem></iconify-icon>
+                                    <p>NodeJS</p>
+                                </div>
+                                <div class='skill'>
+                                    <iconify-icon icon="logos:mysql" class='icon' width=5rem height=5rem></iconify-icon>
+                                    <p>MySql</p>
+                                </div>
+                                <div class='skill'>
+                                    <iconify-icon icon="logos:html-5" class='icon' width=5rem height=5rem></iconify-icon>
+                                    <p>HTML</p>
+                                </div>
+                                <div class='skill'>
+                                    <iconify-icon icon="logos:css-3" class='icon' width=5rem height=5rem></iconify-icon>
+                                    <p>CSS</p>
+                                </div>
+                                <div class='skill'>
+                                    <iconify-icon icon="logos:java" class='icon' width=5rem height=5rem></iconify-icon>
+                                    <p>Java</p>
+                                </div>
+                                <div class='skill'>
+                                    <iconify-icon icon="logos:haskell-icon" class='icon' width=5rem height=5rem></iconify-icon>
+                                    <p>Haskell</p>
+                                </div>
+                                <div class='skill'>
+                                    <iconify-icon icon="logos:c" class='icon' width=5rem height=5rem></iconify-icon>
+                                    <p>C</p>
+                                </div>
+                                <div class='skill'>
+                                    <iconify-icon icon="logos:git-icon" class='icon' width=5rem height=5rem></iconify-icon>
+                                    <p>Git</p>
+                                </div>
+                            </div>
+                            </div>
                 </div>
                 <div class='slide active' id='slide2' data-anchor='slide2'>
                     <div>

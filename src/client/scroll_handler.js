@@ -29,8 +29,10 @@ async function init_fp() {
         let nav = document.getElementsByClassName(
           "section-navigation-wrapper"
         )[0];
+        let arrowDown = document.querySelector('#arrowdown')
         if (origin.index == 0 || destination.index == 0) {
           nav.classList.toggle("visible");
+          arrowDown.classList.toggle("invisible")
           //fp_nav.style.visibility = 'visible';
         }
         if (trigger == null) {
@@ -46,17 +48,21 @@ async function init_fp() {
         console.log(origin, destination);
         let leftClick = document.getElementsByClassName("nav-left-text")[0];
         let rightClick = document.getElementsByClassName("nav-right-text")[0];
-        if (destination.index == 1) {
-          rightClick.innerText = "Contact Me";
-          leftClick.innerText = "About";
-        }
         if (destination.index == 2) {
+          rightClick.innerText = "Contact Me";
+          leftClick.innerText = "About Me";
+        }
+        if (destination.index == 3) {
           leftClick.innerText = "Home";
           rightClick.innerText = "";
         }
-        if (destination.index == 0) {
-          leftClick.innerText = "";
+        if (destination.index == 1) {
+          leftClick.innerText = "Education";
           rightClick.innerText = "Home";
+        }
+        if (destination.index == 0){
+          leftClick.innerText = "";
+          rightClick.innerText = "Skills";
         }
       },
       afterRender: function() {
@@ -93,6 +99,10 @@ async function init_fp() {
         }
         console.log(event.target.tagName, event);
       });
+      document.querySelector("#arrowdown").addEventListener("click", (event) => {
+        console.log("Arrow Down clicked")
+        fullpage_api.moveSectionDown();
+      })
       console.log("Done init fullpage.js")
   };
 export { init_fp };

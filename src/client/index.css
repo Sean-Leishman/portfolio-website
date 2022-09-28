@@ -94,6 +94,22 @@ section{
     left:7.5rem;
 }
 
+.uoe-img{
+    width:100%;
+    height:auto;
+    display: inline-block;
+    position:relative;
+    z-index: 1;
+}
+
+.smu-img{
+    width:60%;
+    height:auto;
+    display: inline-block;
+    position:relative;
+    z-index: 1;
+}
+
 .project-left{
     width: 30%;
     height: 50vh;
@@ -327,6 +343,107 @@ li{
     border-top-color: #FF00FF;
     -webkit-animation: spin 1.5s linear infinite;
     animation: spin 1.5s linear infinite;
+}
+#arrowdown.invisible{
+    opacity:0;
+    visibility: hidden;
+}
+#arrowdown{
+    display:block;
+    position: absolute;
+    bottom: 30px;
+    right: 0;
+    width: 44px;
+    height: 80px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(.5) scaleY(.5);
+    cursor: pointer;
+    z-index: 9;
+
+    opacity: 1;
+    visibility: visible;
+}
+#arrowdown #arrowdown-trail{
+    height: 80px;
+    width: 1px;
+    text-align: center;
+    background-color: #aaa;
+    position: absolute;
+    transform-origin: 50% 0;
+    margin-left: 22px;
+    top: 0;
+    transform: matrix(1, 0, 0, 1, 0, 0);
+}
+
+#arrowdown .rotateLeft {
+    position: absolute;
+    bottom: 0;
+    transform: rotate(45deg);
+    margin-left: 22px;
+}
+
+#arrowdown .rotateRight {
+    position: absolute;
+    bottom: 0;
+    transform: rotate(-45deg);
+    margin-left: 22px;
+}
+
+#arrowdown .arrowdown-caps-one, #arrowdown .arrowdown-caps-two {
+    position: absolute;
+    bottom: 0;
+    width: 1px;
+    height: 16px;
+    transform-origin: 50% 100%;
+    background-color: #aaa;
+}
+
+#skills-wrapper{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap:wrap;
+}
+
+#fullpage .information-slide .projectHeading{
+    text-align:center;
+}
+.information-slide{
+    width:75%
+}
+#skills-wrapper .skill{
+    padding:2rem
+}
+
+#skills-wrapper .skill .icon{
+
+}
+.education-ex{
+    display:flex;
+    justify-content:space-between;
+    align-items: center;
+    margin:1rem 0;
+    padding-right:1rem;
+    height:auto;
+}
+
+.image-col{
+    flex: 0 0 20%;
+    align-items:center;
+    display:flex;
+    justify-content: center;
+}
+.info-col{
+    flex: 0 0 80%
+}
+.info-col h4{
+    margin: 0.5rem 0;
+}
+.info-col ul{
+    padding-left: 1.5rem;
+}
+.info-col ul ul{
+    padding-left: 1.5rem;
 }
 @-webkit-keyframes spin {
     0%   {

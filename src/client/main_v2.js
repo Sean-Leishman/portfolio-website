@@ -1,6 +1,7 @@
 import fullpage from "fullpage.js";
 import { init_fp } from "./scroll_handler.js";
 import { init, animate } from "./three_handler.js";
+import { handle_images } from "./image_handler.js";
 import $ from "jquery";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import * as THREE from "three";
@@ -17,6 +18,7 @@ jQuery(document).ready(function() {
     console.log("Init Animatons")
     await animate();
     await onLoaded();
+    await handle_images();
     //render();
   });
   console.log("Document ready");
