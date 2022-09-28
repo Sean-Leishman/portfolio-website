@@ -548,9 +548,6 @@ async function init(hdrmap, hdrEquirect) {
   imgLogo = document.querySelector(".logo");
   imgLogo.src = img;
 
-  stats = Stats();
-  document.body.appendChild(stats.dom);
-
   window.addEventListener("resize", onResize);
   window.addEventListener("mousemove", onMouseMove);
   document.addEventListener("scroll", onScroll);
@@ -718,7 +715,6 @@ async function animate() {
   if (current_mixer) {
     current_mixer.update(delta);
   }
-  stats.update();
   render();
 }
 function render() {

@@ -12,6 +12,7 @@
             <h1>Loading</h1>
         </section>
         <div class = 'container' style="visibility: hidden;">
+            <img class='logo'> 
             <div class='section-navigation-wrapper'>
                     <ul class='section-navigation'>
                         <li><a class='section-navigation-text' data-section='about' data-slide='slide2'>Home</a></li>
@@ -40,7 +41,6 @@
 
             <div id='fullpage'>
             <canvas class='webgl'></canvas>
-            <img class='logo'> 
             <div class='section title-page' data-anchor="about">
                 <div class='nav'>
                     <div class='nav-left nav-transform'>
@@ -157,8 +157,23 @@
                     </div>
                 </div>
                 <div class='slide' id='slide3' data-anchor="slide3">
-                    <div>
-                        <h1>Contact Us</h1>
+                    <h1>Contact Us</h1>
+                    <div id='contact-wrapper'>
+                        <div class='contact-block'>
+                            <iconify-icon icon="codicon:github-inverted" style="color: white;"width=5rem height=5rem></iconify-icon>
+                            <p>Github</p>
+                            <a>@Sean-Leishman</a>
+                        </div>
+                        <div class='contact-block'>
+                            <iconify-icon icon="clarity:email-solid" class='icon' width=5rem height=5rem></iconify-icon>
+                            <p>Email</p>
+                            <a onclick="location.href='leishmansean:gmail.com'">leishmansean@gmail.com</a>
+                        </div>
+                        <div class='contact-block'>
+                            <iconify-icon icon="logos:linkedin-icon" class='icon' width=5rem height=5rem></iconify-icon>
+                            <p>LinkedIn</p>
+                            <a>@sean-leishman</a>
+                        </div>
                     </div>
                 </div>
                 

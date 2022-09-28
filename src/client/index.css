@@ -90,8 +90,8 @@ section{
     display: inline-block;
     position:fixed;
     z-index: 1;
-    top:7.5rem;
-    left:7.5rem;
+    top:1rem;
+    left:1rem;
 }
 
 .uoe-img{
@@ -445,6 +445,21 @@ li{
 .info-col ul ul{
     padding-left: 1.5rem;
 }
+#contact-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#contact-wrapper .contact-block{
+    margin:1rem;
+    text-align:center;
+}
+
+#contact-wrapper .contact-block a{
+    color: #3b82f6;
+    cursor: pointer;
+}
+
 @-webkit-keyframes spin {
     0%   {
         -webkit-transform: rotate(0deg);
