@@ -487,7 +487,7 @@ async function init(hdrmap, hdrEquirect) {
       //pawnModel.children[0].material.emissive = new THREE.Color(0x00ffff);
       headModel.name = "Head";
       headModel.visible = false;
-      headModel.correct_scale = { x: 30, y: 30, z: 30 };
+      headModel.correct_scale = { x: 0, y: 0, z: 0 };
       headModel.scale_ratio = { x: 1, y: 1, z: 1 };
       headModel.correct_position = { x: 100, y: -50 };
       headModel.isModel = true;

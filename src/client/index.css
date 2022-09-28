@@ -161,8 +161,25 @@ h2 {
     border: none;
     cursor: pointer;
 }
-.nav {
 
+.nav-text-load-animation{
+    opacity:0;
+    animation: nav-load 4s ease-out forwards;
+    animation-delay:6s;
+}
+.nav-text-animation{
+    opacity:0;
+    animation: nav-load-reversible 1s forwards;
+}
+
+.nav-left-text, .nav-right-text {
+    
+}
+
+#arrowdown{
+    opacity:0;
+    animation: nav-load 4s ease-out forwards;
+    animation-delay:6s;
 }
 .nav-left{
     left:2.5rem;
@@ -176,9 +193,7 @@ h2 {
 }
 .nav-right-text, .nav-left-text{
     color: #ffffff;
-    opacity: .5;
-    cursor: pointer;
-    transition: opacity 3s
+    cursor:pointer;
 }
 .nav-home{
     visibility: hidden;
@@ -363,6 +378,18 @@ li{
     opacity: 1;
     visibility: visible;
 }
+.avatar-img{
+    position: fixed;
+    z-index: 0;
+    bottom: 0;
+    right: 27%;
+    height: 75%;
+    width: auto;
+}
+.page-subheading{
+    z-index:2;
+    width:75%
+}
 #arrowdown #arrowdown-trail{
     height: 80px;
     width: 1px;
@@ -439,6 +466,10 @@ li{
 .info-col h4{
     margin: 0.5rem 0;
 }
+.info-col .year{
+    color:#3b82f6;
+    font-size: 2rem;
+}
 .info-col ul{
     padding-left: 1.5rem;
 }
@@ -458,6 +489,34 @@ li{
 #contact-wrapper .contact-block a{
     color: #3b82f6;
     cursor: pointer;
+}
+
+.line{
+    width:5px;
+    height:100%;
+    color:white;
+}
+
+.page-heading{
+    opacity:0;
+    animation: title_load 4s ease-out forwards;
+    animation-delay:4s;
+}
+
+.page-subheading{
+    opacity:0;
+    animation: title_load 4s ease-out forwards;
+    animation-delay:5s;
+}
+
+#blocker{
+    width:100%;
+}
+
+.avatar-img{
+    opacity:0;
+    animation: fadeIn 2s ease-in forwards;
+    animation-delay: 5s;
 }
 
 @-webkit-keyframes spin {
@@ -495,6 +554,28 @@ li{
     }
   }
 
+@keyframes title_load{
+    from { transform: translateY(-50px); opacity:0 }
+    to { transform: translateY(0px); opacity:1 }
+}
+
+@keyframes nav-load{
+    from { opacity:0 }
+    to { opacity:0.5 }
+}
+
+@keyframes nav-load-reversible{
+    0% {
+        opacity:0.5;
+    }
+    5%{
+        opacity:0;
+    }
+    100%{
+        opacity:0.5;
+    }
+}
+
 @media (prefers-reduced-motion: no-preference){
     .animated{
         animation: fadeIn 10s;
@@ -508,6 +589,10 @@ li{
     }
     .project-left{
         width:60%
+    }
+    #titles{
+        top:25%;
+        position:fixed;
     }
 }
 

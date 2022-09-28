@@ -192,9 +192,11 @@ function limitSpeed(boid) {
   }
 
 function update_boids(scene,input_boids){
+    if (containment_box == null){
+      containment_box = scene.children.filter(child => {return child.name == 'Containment Box'})[0];
+      avoidance_box = scene.children.filter(child => {return child.name == 'Avoidance Box'})[0];
+    }
     boids = input_boids;
-    containment_box = scene.children.filter(child => {return child.name == 'Containment Box'})[0];
-    avoidance_box = scene.children.filter(child => {return child.name == 'Avoidance Box'})[0];
     //avoidance_box = avoidance_box.getObjectByName('rect453')
     containment_box.geometry.computeBoundingBox();
     for (let boid of boids) {

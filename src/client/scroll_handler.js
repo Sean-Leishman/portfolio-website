@@ -48,6 +48,17 @@ async function init_fp() {
         console.log(origin, destination);
         let leftClick = document.getElementsByClassName("nav-left-text")[0];
         let rightClick = document.getElementsByClassName("nav-right-text")[0];
+        leftClick.classList.remove("nav-text-animation");
+        rightClick.classList.remove("nav-text-animation");
+        leftClick.classList.remove("nav-text-load-animation");
+        rightClick.classList.remove("nav-text-load-animation");
+
+        void leftClick.offsetWidth;
+        void rightClick.offsetWidth;
+
+        leftClick.classList.add("nav-text-animation");
+        rightClick.classList.add("nav-text-animation");
+        
         if (destination.index == 2) {
           rightClick.innerText = "Contact Me";
           leftClick.innerText = "About Me";
