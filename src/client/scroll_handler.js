@@ -19,6 +19,8 @@ async function init_fp() {
       scrollOverflow: true,
       navigation: false,
       responsive:false,
+      easingcss3:"cubic-bezier(.09,1.58,.63,1.02)",
+      scrollingSpeed: 2500,
       licenseKey: "30AKK-H9O08-A2J18-L0PHH-RQRPO",
       afterLoad: function(origin, destination, direction, trigger) {
         console.log("after load", origin, destination, trigger, this);
@@ -43,6 +45,7 @@ async function init_fp() {
       onLeave: function(origin, destination, direction, trigger) {
         console.log("onleave", origin, destination, direction, trigger);
         onLeave(origin, destination, direction, trigger);
+
       },
       onSlideLeave: function(section, origin, destination, direction, trigger) {
         console.log(origin, destination);
@@ -80,7 +83,7 @@ async function init_fp() {
         console.log("Rendered");
         //fullpage_api.moveTo('about',1)
       },
-      scrollingSpeed: 2000,
+      
     });
     document
       .getElementsByClassName("nav-left-text")[0]

@@ -14,7 +14,7 @@ import * as FP from "fullpage.js";
 import importedPawnModel from "./assets/models/chess.glb";
 import importedHorseModel from "./assets/models/basic_horse.glb";
 import importedMazeModel from "./assets/models/maze.glb";
-import importedHeadModel from "./assets/models/head.glb";
+import importedHeadModel from "./assets/models/website.glb";
 import importedGraphModel from "./assets/models/sort_graph.glb";
 import importedLogoModel from "./assets/models/Logo.glb";
 import { MeshPhysicalMaterial, Vector3 } from "three";
@@ -361,10 +361,10 @@ async function init(hdrmap, hdrEquirect) {
             } ); */
       const material = base_material;
 
-      let p = pawnModel.getObjectByName("Cylinder001");
+      let p = pawnModel.getObjectByName("Cylinder002");
       p.material = material;
       // Sphere to Pawn Animation
-      pawnAction = pawnMixer.clipAction(pawnAnimations[1]);
+      pawnAction = pawnMixer.clipAction(pawnAnimations[pawnAnimations.length-1]);
       pawnAction.setLoop(THREE.LoopOnce);
       pawnAction.clampWhenFinished = true;
       p.geometry.computeVertexNormals();
@@ -477,19 +477,20 @@ async function init(hdrmap, hdrEquirect) {
         side: THREE.DoubleSide,
       });
 
-      let p = headModel.getObjectByName("Sphere004");
-      p.material = material;
+      let p = headModel.getObjectByName("Armature");
+      //p.material = material;
       // Sphere to Pawn Animation
-      headAction = headMixer.clipAction(headAnimations[1]);
+      headAction = headMixer.clipAction(headAnimations[0]);
       headAction.setLoop(THREE.LoopOnce);
       headAction.clampWhenFinished = true;
-      p.geometry.computeVertexNormals();
+      //p.geometry.computeVertexNormals();
       //pawnModel.children[0].material.emissive = new THREE.Color(0x00ffff);
       headModel.name = "Head";
       headModel.visible = false;
-      headModel.correct_scale = { x: 0, y: 0, z: 0 };
+      headModel.correct_scale = { x: 150, y: 150, z: 150 };
       headModel.scale_ratio = { x: 1, y: 1, z: 1 };
-      headModel.correct_position = { x: 100, y: -50 };
+      headModel.correct_position = { x: 100, y: -150 };
+      headModel.rotation.set(0.1,-0.1,0) 
       headModel.isModel = true;
       headModel.loaded = true;
       //headModel.position.set(0,-1000,0);
@@ -772,7 +773,7 @@ function break_model() {
 
   previous_mixer.removeEventListener("finished", animation_finished);
 
-  previous_action = current_mixer.clipAction(previous_animations[1]);
+  previous_action = current_mixer.clipAction(previous_animations[previous_animations.length - 1]);
   previous_action.setLoop(THREE.LoopOnce);
   previous_action.paused = false;
   previous_action.timeScale = -3;
@@ -834,7 +835,7 @@ function displayModel() {
     current_animations,
     current_action,
   ] = get_current_model_details(current_model);
-  console.log("current model", current_model, models);
+  //console.log("current model", current_model, models);
   if (!current_model){
     return;
   }

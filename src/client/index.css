@@ -519,6 +519,10 @@ li{
     animation-delay: 5s;
 }
 
+.animated-header{
+    
+}
+
 @-webkit-keyframes spin {
     0%   {
         -webkit-transform: rotate(0deg);
