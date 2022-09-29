@@ -496,18 +496,35 @@ li{
     height:100%;
     color:white;
 }
+#titles{
+    display:block;
+    position:absolute;
+    height: 10rem;
+    width:30rem;
 
+}
 .page-heading{
     opacity:0;
     animation: title_load 4s ease-out forwards;
     animation-delay:4s;
+    width:100%;
+    text-align:left;
+    font-size: 4rem;
 }
 
 .page-subheading{
     opacity:0;
     animation: title_load 4s ease-out forwards;
     animation-delay:5s;
+    width:100%;
+    font-size: 1rem;
 }
+
+.console-underscore {
+    display:inline-block;
+   position:relative;
+   top:-0.14em;
+ }
 
 #blocker{
     width:100%;
@@ -520,8 +537,12 @@ li{
 }
 
 .animated-header{
-    
+
 }
+
+.hidden {
+    opacity:0;
+  }
 
 @-webkit-keyframes spin {
     0%   {
