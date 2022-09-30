@@ -16,7 +16,7 @@ async function init_fp() {
       slidesNavigation: false,
       controlArrows: false,
       fixedElements: ".webgl",
-      scrollOverflow: true,
+      scrollOverflow: false,
       navigation: false,
       responsive:false,
       easingcss3:"cubic-bezier(.09,1.58,.63,1.02)",

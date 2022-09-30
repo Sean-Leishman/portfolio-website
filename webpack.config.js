@@ -12,12 +12,15 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'Output 1',
-            template: './src/client/index.html',
+            template: './src/client/main.html',
+            filename: '[name].[ext]'
         }),
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery"
+        }),
+        new MiniCssWebpackPlugin({
+            filename: "[name]/../index.css"
         })
     ],
     output: {
@@ -28,7 +31,7 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/i,
-                use: ['style-loader','css-loader'],
+                use: [MiniCssExtractPlugin.loader, "style-loader"],
             },
             {
                 test: /\.hdr$/i,
@@ -76,6 +79,9 @@ module.exports = {
                 use: [
                   {
                     loader: 'html-loader',
+                    options:{
+                        name:'[name].[ext]'
+                    }
                   }
                 ]
               }

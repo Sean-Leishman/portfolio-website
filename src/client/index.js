@@ -12,9 +12,18 @@ import './assets/images/drawing.svg';
 import './boids.js';
 import './init_models.js';
 
-
-import ChessImg from './assets/images/chess-gameplay-2.png';
-import onLeave from './main_v2.js';
-
-const chess_img = document.querySelector('.chess-example');
-chess_img.src = ChessImg;
+import { initializeApp } from 'firebase/app';
+import { getFirestore, doc, getDoc } from 'firebase/firestore/lite';
+/*
+const firebaseConfig = {
+    apiKey: "AIzaSyAKpwy-KRcA-u8loE638kmip_qiaWRZItA",
+    authDomain: "portolfio-2c85b.firebaseapp.com",
+    projectId: "portolfio-2c85b",
+    storageBucket: "portolfio-2c85b.appspot.com",
+    messagingSenderId: "433920767655",
+    appId: "1:433920767655:web:b6b3b842901765ab45cd82",
+    measurementId: "G-M200SV9SNS"
+  };
+const firebaseApp = initializeApp(firebaseConfig);
+const analytics = getAnalytics(firebaseApp);
+*/
