@@ -1,6 +1,9 @@
 # Portfolio Website
 The source code for my personal portolfio website which can be viewed at https://seanleishman.com.
 
+## Instructions
+Run on a local machine using `npm run start`  
+Build using `npm run build`
 ## Built With
  - HTML
  - CSS
